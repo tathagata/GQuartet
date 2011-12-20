@@ -1,1 +1,5 @@
-Testing commit
+Some Notes:
+
+git remote add origin git@github.com:gdevanla/GQuartet.git
+git push -u origin master
+
