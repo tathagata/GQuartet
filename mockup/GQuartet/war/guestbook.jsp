@@ -37,13 +37,8 @@
       </div>
 
 <div class="content">
-        <!--
-	<div class="page-header">
-          <h1>Quartet <small>No question is studpid</small></h1>
-        </div>
-	-->
 	<div class="hero-unit">
-            <iframe id="slide" src="http://mozilla.github.com/pdf.js/web/viewer.html" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
+            <iframe id="slide" src="viewer/viewer.html" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
 		<div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
 
         </div>
@@ -51,10 +46,10 @@
 	<script>
 		$("#fullscreen").toggle(function(){
 			$("#discussion").hide();
-			$("#slide").animate({"height":"+=390"},500);
+			$("#slide").animate({"height":"+=385"},500);
 		},function(){
 			$("#discussion").show();
-			$("#slide").animate({"height":"-=390"},500);
+			$("#slide").animate({"height":"-=385"},500);
 		});
 	</script>
 
