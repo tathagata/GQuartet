@@ -1,5 +1,5 @@
 <project name="Guestbook Highrep" default="compile">
-  <property name="appengine.sdk" location="/home/guru/fsf/src/appengine-java-sdk-1.6.1" />
+  <property name="appengine.sdk" location="/home/tathagata/Desktop/school/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.6.0.v201111171704r37/appengine-java-sdk-1.6.0/" />
 
   <import file="${appengine.sdk}/config/user/ant-macros.xml" />
 
