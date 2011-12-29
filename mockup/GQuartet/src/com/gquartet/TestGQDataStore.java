@@ -6,14 +6,13 @@ import java.util.Map;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.*;
-
 import com.gquartet.data.*;
 
 
 import java.io.IOException;
 import javax.servlet.http.*;
-
 import java.util.logging.Logger;
+import java.util.*;
 
 
 @SuppressWarnings("serial")
@@ -33,28 +32,50 @@ public class TestGQDataStore extends HttpServlet {
       if ( "addnewtalk".equals(action) )
        {
 
-        data.append(action).(" performed \n " );
+        data.append(action).append(" performed \n " );
+
+
         data.append ( GQDataStore.AddNewTalk("presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA"
                 , new Date() 
-                , "Talk 1" ) );
+                , (String)req.getParameter("talkname") ) );
  
       }
 
       if ( "getTalks".equals(action) )
       {
 
-
-
-
-
-
+        Map<String, Talk>  list = GQDataStore.GetTalks();
+        for ( Map.Entry<String,Talk> entry : list.entrySet() )
+        {
+          Talk t = entry.getValue();
+          log.warning("Talk Name :"  + t.talkName );
+          data.append(t.talkName).append(" ").append(t.resourceId).append(" ").append(t.dateTime).append("\n");
+        }
       }
 
+     if ( "getTalkByTalkName".equals(action) )
+     {
+          Talk t  = GQDataStore.GetTalkByTalkName((String)req.getParameter("talkname"));
+          if ( t != null )
+            data.append(t.talkName).append(" ").append(t.resourceId).append(" ").append(t.dateTime).append("\n"); 
+          else
+            data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
+     }
+
+
+      if ( "getTalkByKey".equals(action) )
+     {
+          Talk t  = GQDataStore.GetTalkByKey((String)req.getParameter("key"));
+          if ( t != null )
+            data.append(t.talkName).append(" ").append(t.resourceId).append(" ").append(t.dateTime).append("\n"); 
+          else
+            data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
+     }
 
 
 
-
-
+      
+     
 
     resp.setContentType("text/plain");
 		resp.getWriter().println("Hello, world");
