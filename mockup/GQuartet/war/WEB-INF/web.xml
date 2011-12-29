@@ -7,7 +7,17 @@
     <servlet>
         <servlet-name>GQuartetServlet</servlet-name>
         <servlet-class>com.gquartet.GQuartetServlet</servlet-class>
-    </servlet>
+      </servlet>
+
+    <servlet>
+        <servlet-name>TestPDF</servlet-name>
+        <servlet-class>com.gquartet.TestPDF</servlet-class>
+      </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TestPDF</servlet-name>
+        <url-pattern>/testpdf</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GQuartetServlet</servlet-name>
         <url-pattern>/home</url-pattern>
