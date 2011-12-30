@@ -42,7 +42,16 @@ public class Slide
     b.append( "Slide (").append(k.getId()).append(") : ").append( "SlideNo=" ).append(SlideNo);
     b.append(" ParentInfo = ").append(k.getParent().toString());
 
+    b.append("\n");
+    for ( Question q : questions )
+    {
+      b.append("\t").append(q.toString()).append("\n");
+    }
+
     return b.toString();
   }
 
 }
+
+
+

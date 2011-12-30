@@ -12,14 +12,20 @@ public class Question
 {
   public String key;
   public String questionText;;
-  public int rating;
+  public long rating;
+  public Date datePosted;
+
+
+  //attributes that are populated in some instances
+  List<Comment> comments = new ArrayList<Comment>();
 
   public static Question GetQuestion(Entity entity)
   {
       Question q = new Question();
       q.key = KeyFactory.keyToString(entity.getKey());
       q.questionText = (String)entity.getProperty("Text");
-      q.rating = (Integer)entity.getProperty("Rating");
+      q.rating = (Long)entity.getProperty("Rating");
+      q.datePosted = (Date)entity.getProperty("DatePosted");
 
       return q;
   }
@@ -30,8 +36,27 @@ public class Question
     Entity questionEntity = new Entity("Question", KeyFactory.stringToKey(slideKey));
     questionEntity.setProperty("Text", questionText);
     questionEntity.setProperty("Rating", rating);
+    questionEntity.setProperty("DatePosted", new Date());
 
     return questionEntity;
   }
+
+  public String toString()
+  {
+    StringBuilder b = new StringBuilder();
+    Key k = KeyFactory.stringToKey(key);
+    b.append( "Question (").append(k.getId()).append(") : ").append( " Text=" ).append(questionText);
+    b.append(" Date Posted=").append(datePosted);
+    b.append(" ParentInfo = ").append(k.getParent().toString());
+    b.append("\n");
+
+    for ( Comment c : comments )
+    {
+      b.append("\t\t").append(c.toString()).append("\n");
+    }
+
+    return b.toString();
+  }
+
       
 }

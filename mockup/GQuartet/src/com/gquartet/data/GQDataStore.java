@@ -31,16 +31,12 @@ public class GQDataStore {
     TestNewEmployee();
   }
 
-  public static String AddNewTalk(String resourceId, Date sessionDate, String talkName )
+  public static String AddNewTalk(String resourceId, Date talkDate, String talkName )
   {
+     Entity talk = Talk.GetEntity(resourceId, talkDate, talkName);
+     datastore.put(talk);
 
-    Entity talk = new Entity(GQDataConstants.TALK);
-    talk.setProperty("Date", new Date());
-    talk.setProperty("DocumentId", resourceId);
-    talk.setProperty("Name", talkName);
-    datastore.put(talk);
-
-    return KeyFactory.keyToString(talk.getKey());
+     return KeyFactory.keyToString(talk.getKey());
 
   }
 
@@ -51,15 +47,10 @@ public class GQDataStore {
      Query query = new Query("Talk");
      for (Entity entity : datastore.prepare(query).asIterable()) 
      {
-       Talk t = new Talk();
-       t.resourceId = (String)entity.getProperty("DocumentId");
-       t.talkName = (String)entity.getProperty("Name");
-       t.dateTime = (Date)entity.getProperty("Date");
+       Talk t = Talk.GetTalk(entity);
        talks.put(t.talkName, t);
      }
-
      return talks;
-
   }
 
   public static Talk GetTalkByKey(String key)
@@ -69,12 +60,7 @@ public class GQDataStore {
       //Key k = KeyFactory.createKey("Talk", id);
       Key k = KeyFactory.stringToKey(key);
       Entity entity =  datastore.get(k);
-       Talk t = new Talk();
-       t.resourceId = (String)entity.getProperty("DocumentId");
-       t.talkName = (String)entity.getProperty("Name");
-       t.dateTime = (Date)entity.getProperty("Date");
-      
-       return t;
+      return Talk.GetTalk(entity);
       
     }
     catch ( Exception ex)
@@ -95,13 +81,7 @@ public class GQDataStore {
      {
        if ( talkName.equals(entity.getProperty("Name") ))
            {
-
-             Talk t = new Talk();
-             t.resourceId = (String)entity.getProperty("DocumentId");
-             t.talkName = (String)entity.getProperty("Name");
-             t.dateTime = (Date)entity.getProperty("Date");
-
-             return t;
+             return Talk.GetTalk(entity);
            }
      }
 
@@ -123,6 +103,76 @@ public class GQDataStore {
       return KeyFactory.keyToString(entity.getKey());
   }
 
+  public static String AddComment(String questionKey, String text, int rating)
+  {
+      Entity entity = Comment.GetEntity(questionKey, text, rating);
+      datastore.put(entity);
+
+      return KeyFactory.keyToString(entity.getKey());
+  }
+
+
+
+  public static Slide GetSlideQuestionsAndComments(String talkKey, long slideNo)
+  {
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    Slide requiredSlide = null;
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         requiredSlide = Slide.GetSlide(e);
+
+         //Get questions
+         List<Entity> questions =  GQDataStore.GetChildrenByKind(slideKey,"Question");
+
+         for ( Entity qe: questions )
+         {
+             Question q = Question.GetQuestion(qe);
+             String qKey = KeyFactory.keyToString(qe.getKey());
+
+             List<Entity> comments =  GQDataStore.GetChildrenByKind(qKey,"Comment");
+
+             for ( Entity ce : comments )
+             {
+               Comment c = Comment.GetComment(ce);
+               q.comments.add(c);
+             }
+
+             requiredSlide.questions.add(q);
+         }
+      }
+    }
+
+    return requiredSlide;
+  }
+
+
+  public static List<Entity> GetAllContent(String talkKey)
+  {
+    Query q = new Query();
+    q.setAncestor(KeyFactory.stringToKey(talkKey));
+    List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+    return results;
+  }
+
+  
+  public static List<Entity> GetChildrenByKind(String key, String childName)
+  {
+    Query q = new Query(childName);
+    Key entKey = KeyFactory.stringToKey(key);
+    q.setAncestor(entKey);
+
+    q.addFilter(Entity.KEY_RESERVED_PROPERTY, Query.FilterOperator.GREATER_THAN,
+    entKey); 
+
+    List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+    return results;
+
+  }
+
+  /*
   public static Slide GetSlideQuestions(String talkKey, int slideNo)
   {
       List<Entity> results = GetTalkContent(talkKey);
@@ -144,18 +194,14 @@ public class GQDataStore {
                 slide.questions.add(q);
               }
             }
-
-
-
           }
-
         }
       }
       return null;
-
   }
 
-  public static List<Entity> GetSlideContent(String talkKey, int slideNo)
+ 
+  public static Slide GetSlideContent(String talkKey, int slideNo)
   {
      
     List<Entity> results = GetTalkContent(talkKey);
@@ -166,7 +212,7 @@ public class GQDataStore {
         if ( (Long)e.getProperty("SlideNo") == slideNo )
         {
           String slideKey = KeyFactory.keyToString(e.getKey());
-          return GQDataStore.GetSlideContent(slideKey);
+          List<Entity> slides = GQDataStore.GetSlideContent(slideKey);
         }
 
       }
@@ -175,22 +221,14 @@ public class GQDataStore {
     return null;
   }
 
+
   public static List<Entity> GetSlideContent(String slideKey)
   {
     Query q = new Query();
     q.setAncestor(KeyFactory.stringToKey(slideKey));
     List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
     return results;
-  }
-
-
-  public static List<Entity> GetTalkContent(String talkKey)
-  {
-    Query q = new Query();
-    q.setAncestor(KeyFactory.stringToKey(talkKey));
-    List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
-    return results;
-  }
+  }*/
 
 
   public static void TestNewEmployee()
