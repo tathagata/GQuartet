@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.*;
 
 import java.util.logging.Logger;
+import java.util.*;
 
 
 class GQDataConstants
@@ -37,7 +38,6 @@ public class GQDataStore {
     talk.setProperty("Date", new Date());
     talk.setProperty("DocumentId", resourceId);
     talk.setProperty("Name", talkName);
-
     datastore.put(talk);
 
     return KeyFactory.keyToString(talk.getKey());
@@ -45,7 +45,152 @@ public class GQDataStore {
   }
 
 
+  public static Map<String, Talk> GetTalks()
+  {
+     Map<String, Talk> talks = new HashMap<String, Talk>();
+     Query query = new Query("Talk");
+     for (Entity entity : datastore.prepare(query).asIterable()) 
+     {
+       Talk t = new Talk();
+       t.resourceId = (String)entity.getProperty("DocumentId");
+       t.talkName = (String)entity.getProperty("Name");
+       t.dateTime = (Date)entity.getProperty("Date");
+       talks.put(t.talkName, t);
+     }
 
+     return talks;
+
+  }
+
+  public static Talk GetTalkByKey(String key)
+  {
+    try
+    {
+      //Key k = KeyFactory.createKey("Talk", id);
+      Key k = KeyFactory.stringToKey(key);
+      Entity entity =  datastore.get(k);
+       Talk t = new Talk();
+       t.resourceId = (String)entity.getProperty("DocumentId");
+       t.talkName = (String)entity.getProperty("Name");
+       t.dateTime = (Date)entity.getProperty("Date");
+      
+       return t;
+      
+    }
+    catch ( Exception ex)
+    {
+      log.warning(ex.getMessage());
+    }
+
+    return null;
+
+  }
+
+
+  public static Talk GetTalkByTalkName(String talkName)
+  {
+     Map<String, Talk> talks = new HashMap<String, Talk>();
+     Query query = new Query("Talk");
+     for (Entity entity : datastore.prepare(query).asIterable()) 
+     {
+       if ( talkName.equals(entity.getProperty("Name") ))
+           {
+
+             Talk t = new Talk();
+             t.resourceId = (String)entity.getProperty("DocumentId");
+             t.talkName = (String)entity.getProperty("Name");
+             t.dateTime = (Date)entity.getProperty("Date");
+
+             return t;
+           }
+     }
+
+     return null;
+  }
+
+  public static String AddSlide(String talkKey, Integer slideNo)
+  {
+      Entity entity = Slide.GetEntity(talkKey, slideNo);
+      datastore.put(entity);
+      return KeyFactory.keyToString(entity.getKey());
+  }
+
+  public static String AddQuestion(String slideKey, String text, int rating)
+  {
+      Entity entity = Question.GetEntity(slideKey, text, rating);
+      datastore.put(entity);
+
+      return KeyFactory.keyToString(entity.getKey());
+  }
+
+  public static Slide GetSlideQuestions(String talkKey, int slideNo)
+  {
+      List<Entity> results = GetTalkContent(talkKey);
+      for ( Entity e : results )
+      {
+        if ( e.getKind().equals("Slide") )
+        {
+          if ( (Long)e.getProperty("SlideNo") == slideNo )
+          {
+            String slideKey = KeyFactory.keyToString(e.getKey());
+            List<Entity> slideAndChildren =  GQDataStore.GetSlideContent(slideKey);
+
+            Slide slide = Slide.GetSlide(e);
+            for ( Entity e1: slideAndChildren )
+            {
+              if ( e1.getKind().equals("Question") )
+              {
+                Question q = Question.GetQuestion(e1);
+                slide.questions.add(q);
+              }
+            }
+
+
+
+          }
+
+        }
+      }
+      return null;
+
+  }
+
+  public static List<Entity> GetSlideContent(String talkKey, int slideNo)
+  {
+     
+    List<Entity> results = GetTalkContent(talkKey);
+    for ( Entity e : results )
+    {
+      if ( e.getKind().equals("Slide") )
+      {
+        if ( (Long)e.getProperty("SlideNo") == slideNo )
+        {
+          String slideKey = KeyFactory.keyToString(e.getKey());
+          return GQDataStore.GetSlideContent(slideKey);
+        }
+
+      }
+    }
+
+    return null;
+  }
+
+  public static List<Entity> GetSlideContent(String slideKey)
+  {
+    Query q = new Query();
+    q.setAncestor(KeyFactory.stringToKey(slideKey));
+    List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+    return results;
+  }
+
+
+  public static List<Entity> GetTalkContent(String talkKey)
+  {
+    Query q = new Query();
+    q.setAncestor(KeyFactory.stringToKey(talkKey));
+    List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
+    return results;
+  }
 
 
   public static void TestNewEmployee()
