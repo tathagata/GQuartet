@@ -72,8 +72,41 @@ public class TestGQDataStore extends HttpServlet {
             data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
      }
 
+     if ( "addSlide".equals(action) )
+     {
+       log.warning("___Parent key for Slide is___" + req.getParameter("parentKey") );
+       String key  = GQDataStore.AddSlide((String)req.getParameter("parentKey"), Integer.parseInt(req.getParameter("slideNo")));
+       data.append("Slide Key ").append(key).append("\n");
+     }
 
+     if ( "addQuestion".equals(action) )
+     {
+       String key  = GQDataStore.AddQuestion((String)req.getParameter("parentKey"), (String)req.getParameter("questionText"), Integer.parseInt(req.getParameter("rating")));
+       data.append("Question Key ").append(key).append("\n");
+     }
 
+     if ( "getTalkContent".equals(action) )
+     {
+       List<Entity> results = GQDataStore.GetTalkContent(req.getParameter("parentKey"));
+
+       for ( Entity e : results )
+       {
+         data.append(e.getKey().toString()).append(" ").append(e.getKey().getId()).append("\n");
+
+         if ( e.getKind().equals("Slide") )
+           data.append( Slide.GetSlide(e).toString());
+       }
+     }
+
+     if ( "getSlideContent".equals(action) )
+     {
+       List<Entity> results = GQDataStore.GetSlideContent(req.getParameter("parentKey"), Integer.parseInt(req.getParameter("slideNo")));
+
+       for ( Entity e : results )
+       {
+         data.append(e.getKey().toString()).append("\n");
+       }
+     }
       
      
 
