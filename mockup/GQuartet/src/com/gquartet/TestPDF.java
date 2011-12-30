@@ -60,7 +60,8 @@ public class TestPDF extends HttpServlet {
   {
     documentList = new DocumentList(
                   "JavaGDataClientSampleAppV3.0" , "docs.google.com");
-    documentList.login("gquartetbeta@gmail.com", "Google!234");
+    
+    //documentList.login("gquartetbeta@gmail.com", "Google!234");
   }
   catch(Exception ex)
   {
@@ -76,63 +77,65 @@ public class TestPDF extends HttpServlet {
 			throws IOException {
 
       //listDocuments(req, resp);;
-    //
-    try
-    {
-
-     log.warning("test logging");
-
-     resp.setContentType("application/pdf");
-     //resp.getWriter().println("Over here");
-
-     //InputStream inStream = null;
-
-      //ResourceId=presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA
-      //
-      if ( documentList == null ) log.warning ( "Document object not initialized");
-
-     InputStream inStream =documentList.getPresentation("presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA", "pdf");
-
-     log.warning("test logging 111");
-
-     //resp.getWriter().println("Over here");
-
-     //ServletOutputStream outStream = resp.getOutputStream();  
-     try
+     if ( "getList".equals(req.getParameter("action") ) )
      {
-      int c;
-
-      while ((c = inStream.read()) != -1) {
-        //outStream.write(c);
-        
-        resp.getWriter().write(c);
-        //log.warning("ere");;
-
-        //System.out.println(c);
-      }
+          listDocuments(req, resp);
      }
-     finally {
-     //if (inStream != null) {
-      //  inStream.close();
-      //}
-      //if (outStream != null) {
-        //outStream.flush();
-        //outStream.close();
-      //}
-    }
-    }
-    catch ( Exception ex )
+     else
      {
-    		resp.setContentType("text/plain");
-
-	    	resp.getWriter().println("Exception occurred  "  + ex.getMessage()) ; 
-     }
+        //String resourceId="presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA";
+        String resourceId = req.getParameter("resourceId");
+        serveDocument(req, resp, resourceId);
+    }
 
       //String resourceId = documentEntry.getResourceId();  // resourceId is of the form "presentation:dfrkj84g_9128gtvh8nt"
       //downloadPresentation(resourceId, "/path/to/export/to/preso.pdf", "pdf");
-
-
 	}
+
+  public void serveDocument(HttpServletRequest req, HttpServletResponse resp, String resourceId)
+			throws IOException 
+  {
+
+    try
+    {
+
+       resp.setContentType("application/pdf");
+       //resp.getWriter().println("Over here");
+
+       //InputStream inStream = null;
+
+        //String resourceId=presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA
+        //
+       if ( documentList == null ) 
+       {
+         log.warning ( "Document object not initialized");
+         throw new Exception("Document object not initialized");
+       }
+
+        HttpSession session = req.getSession(true);
+        documentList.loginWithAuthSubToken((String)session.getValue("DOC_SESSION_TOKEN"));
+
+       InputStream inStream =documentList.getPresentation(resourceId,"pdf");  //"presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA", "pdf");
+
+       try
+       {
+        int c;
+        while ((c = inStream.read()) != -1) {
+          resp.getWriter().write(c);
+        }
+       }
+       finally {
+       if (inStream != null) {
+          inStream.close();
+          }
+        }
+      }
+      catch ( Exception ex )
+       {
+          resp.setContentType("text/plain");
+          resp.getWriter().println("Exception occurred  "  + ex.getMessage()) ; 
+       }
+  }
 
 
 
@@ -141,17 +144,20 @@ public class TestPDF extends HttpServlet {
       try
       {
 
+        HttpSession session = req.getSession(true);
+        documentList.loginWithAuthSubToken((String)session.getValue("DOC_SESSION_TOKEN"));
 
       DocumentListFeed feed =  documentList.getDocsListFeed("all");
 
       StringBuffer s = new StringBuffer();
       if ( feed !=  null )
       {
-          s.append("List of Documents");
-
+          s.append("List of Documents <br>");
+          
           for ( DocumentListEntry entry: feed.getEntries())
           {
               s.append(printDocumentEntry(entry));
+              s.append("<br>");
           }
 
   		resp.setContentType("text/plain");
@@ -166,12 +172,9 @@ public class TestPDF extends HttpServlet {
       }
       catch ( Exception ex)
       {
-
     		resp.setContentType("text/plain");
 	    	resp.getWriter().println( ex.getMessage()) ; 
-
       }
-
 
   }
 

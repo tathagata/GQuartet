@@ -7,7 +7,14 @@
 
 'use strict';
 
-PDFJS.getPdf('http://localhost:8080/testpdf', function getPdfHelloWorld(data) {
+<% String protocol = request.getScheme();
+   String domain = request.getDomain();
+   String port=Integer.toString(request.getServerPort());
+
+   String path=protocol + "://" + domain + ":" + port + "/testpdf";
+%>
+
+PDFJS.getPdf(<%=path%>, function getPdfHelloWorld(data) {
   //
   // Instantiate PDFDoc with PDF data
   //

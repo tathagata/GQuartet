@@ -157,6 +157,7 @@ public class DocumentList {
     this.host = host;
   }
 
+  
   /**
    * Set user credentials based on a username and password.
    *
