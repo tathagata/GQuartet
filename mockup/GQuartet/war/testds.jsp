@@ -51,6 +51,40 @@
     <input type="submit" value="Submit">
   </form>
 
+  <form action="/testdb?action=updateActiveSlide" method="post">
+    <p>Update Active Slide No</p>
+    Talk Key
+    <input type="text" name="talkKey"/>
+    New Active Slide
+    <input type="text" name="slideNo"/>
+    <input type="submit" value="Submit">
+  </form>
+
+  <form action="/testdb?action=updateQuestionRating" method="post">
+    <p>Update Question Rating</p>
+    Question Key
+    <input type="text" name="questionKey"/>
+    New Rating
+    <input type="text" name="rating"/>
+    <input type="submit" value="Submit">
+  </form>
+
+  <form action="/testdb?action=updateCommentRating" method="post">
+    <p>Update CommentRating</p>
+    Comment Key
+    <input type="text" name="commentKey"/>
+    New Rating
+    <input type="text" name="rating"/>
+    <input type="submit" value="Submit">
+  </form>
+
+
+
+
+
+
+
+
 
   <!--
 

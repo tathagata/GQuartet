@@ -64,8 +64,33 @@ public class TestGQDataStore extends HttpServlet {
        Slide s = GQDataStore.GetSlideQuestionsAndComments(req.getParameter("parentKey"), Integer.parseInt(req.getParameter("slideNo")));
 
        data.append(s.toString());
+     }
 
+     if ( "updateActiveSlide".equals(action) )
+     {
+        long slideNo = Long.parseLong(req.getParameter("slideNo"));
+        String key = req.getParameter("talkKey");
+        GQDataStore.UpdateActiveSlideNo(key, slideNo);
 
+        data.append("Talk has been updated with active slide");
+     }
+
+     if ( "updateQuestionRating".equals(action) )
+     {
+        long rating = Long.parseLong(req.getParameter("rating"));
+        String key = req.getParameter("questionKey");
+        GQDataStore.UpdateQuestionRating(key, rating);
+
+        data.append("Question has been updated with new rating");
+     }
+ 
+      if ( "updateCommentRating".equals(action) )
+     {
+        long rating = Long.parseLong(req.getParameter("rating"));
+        String key = req.getParameter("commentKey");
+        GQDataStore.UpdateCommentRating(key, rating);
+
+        data.append("Question has been updated with new rating");
      }
       
      

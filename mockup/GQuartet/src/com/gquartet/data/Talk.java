@@ -12,10 +12,13 @@ public class Talk
   public String talkName;
   public Date dateTime;
 
+  public long activeSlideNo=0;
+  public Date slideChangedDate = new Date();
+
   //attributes that are populated in some scenarios
   List<Slide> slides = new ArrayList<Slide>();
 
-  public static Entity GetEntity( String resourceId, Date sessionDate, String talkName)
+  public static Entity GetEntity( String resourceId, Date sessionDate, String talkName, long slideNo, Date slideChanged)
   {
     
     Entity talk = new Entity("Talk");
@@ -23,8 +26,15 @@ public class Talk
     talk.setProperty("DocumentId", resourceId);
     talk.setProperty("Name", talkName);
 
+    talk.setProperty("ActiveSlideNo", slideNo);
+    talk.setProperty("SlideChanged", slideChanged);
+    
     return talk;
   }
+
+
+
+
 
   public static Talk GetTalk(Entity entity)
   {
@@ -35,6 +45,16 @@ public class Talk
        t.dateTime = (Date)entity.getProperty("Date");
 
        return t;
+  }
+
+  public static void UpdateActiveSlide(Entity e, long slideNo)
+  {
+      if ( e.getKind().equals("Talk") )
+      {
+        e.setProperty("ActiveSlideNo", slideNo);
+        e.setProperty("SlideChanged", new Date());
+
+      }
   }
 
 

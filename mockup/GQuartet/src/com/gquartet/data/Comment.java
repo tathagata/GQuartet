@@ -37,6 +37,11 @@ public class Comment
     return commentEntity;
   }
 
+  public static void UpdateRating(Entity e, long rating)
+  {
+    e.setProperty("Rating", rating);
+  }
+
    public String toString()
     {
       StringBuilder b = new StringBuilder();

@@ -41,6 +41,11 @@ public class Question
     return questionEntity;
   }
 
+  public static void UpdateRating(Entity e, long rating)
+  {
+    e.setProperty("Rating", rating);
+  }
+
   public String toString()
   {
     StringBuilder b = new StringBuilder();

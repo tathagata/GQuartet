@@ -33,7 +33,7 @@ public class GQDataStore {
 
   public static String AddNewTalk(String resourceId, Date talkDate, String talkName )
   {
-     Entity talk = Talk.GetEntity(resourceId, talkDate, talkName);
+     Entity talk = Talk.GetEntity(resourceId, talkDate, talkName, 0, new Date());
      datastore.put(talk);
 
      return KeyFactory.keyToString(talk.getKey());
@@ -57,11 +57,9 @@ public class GQDataStore {
   {
     try
     {
-      //Key k = KeyFactory.createKey("Talk", id);
       Key k = KeyFactory.stringToKey(key);
       Entity entity =  datastore.get(k);
       return Talk.GetTalk(entity);
-      
     }
     catch ( Exception ex)
     {
@@ -69,7 +67,22 @@ public class GQDataStore {
     }
 
     return null;
+  }
 
+  public static Entity GetEntityByKey(String key)
+  {
+    try
+    {
+      Key k = KeyFactory.stringToKey(key);
+      return datastore.get(k);
+    }
+    catch ( Exception ex)
+    {
+      log.warning("The entity for the requested key " + key + " does not exist");
+      log.warning(ex.getMessage());
+    }
+
+    return null;
   }
 
 
@@ -171,6 +184,29 @@ public class GQDataStore {
     return results;
 
   }
+
+  public static void UpdateActiveSlideNo(String talkKey, long slideNo)
+  {
+      Entity e =  GetEntityByKey(talkKey);
+      Talk.UpdateActiveSlide(e, slideNo);
+      datastore.put(e);
+  }
+
+  public static void UpdateQuestionRating(String questionKey, long rating)
+  {
+      Entity e =  GetEntityByKey(questionKey);
+      Question.UpdateRating(e, rating);
+      datastore.put(e);
+  }
+
+
+  public static void UpdateCommentRating(String commentKey, long rating)
+  {
+      Entity e =  GetEntityByKey(commentKey);
+      Comment.UpdateRating(e, rating);
+      datastore.put(e);
+  }
+
 
   /*
   public static Slide GetSlideQuestions(String talkKey, int slideNo)
