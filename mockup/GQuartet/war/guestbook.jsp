@@ -8,25 +8,16 @@
 
 <div class="sidebar">
         <div class="well">
-          <h5>Sidebar</h5>
+          <h5>Controls</h5>
           <ul>
 
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
+            <li><a href="http://blackboard.uic.edu">Blackboard</a></li>
+            <li><a href="http://mail.google.com">Gmail</a></li>
+            <li><a href="http://docs.google.com">Google Docs</a></li>
+            <li><a href="http://en.wikipedia.org">Wikipedia</a></li>
           </ul>
-          <h5>Sidebar</h5>
-
-          <ul>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-
-            <li><a href="#">Link</a></li>
-          </ul>
+          <h5>Google Calendar</h5>
+<iframe src="https://www.google.com/calendar/embed?src=qkdih1tgs5mn5llccl60mm7ods%40group.calendar.google.com&ctz=America/Chicago" style="border: 0" width="200" height="350" frameborder="0" scrolling="no"></iframe>
           <h5>Sidebar</h5>
           <ul>
             <li><a href="#">Link</a></li>
