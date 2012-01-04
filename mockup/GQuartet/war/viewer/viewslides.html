@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+
+  <head>
+ <!-- In production, only one script (pdf.js) is necessary -->
+  <!-- In production, change the content of PDFJS.workerSrc below -->
+  <script type="text/javascript" src="pdf.js"></script>
+    <script type="text/javascript">
+    // Specify the main script used to create a new PDF.JS web worker.
+    // In production, change this to point to the combined `pdf.js` file.
+    PDFJS.workerSrc = 'pdf.js';
+  </script>
+  <script type="text/javascript" src="hello.js"></script>
+</head>
+
+<body>
+  <canvas id="the-canvas" style="border:1px solid black;"/>
+</body>
+
+</html>
+

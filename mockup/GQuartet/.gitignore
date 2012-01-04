@@ -1,2 +1,8 @@
 *.class
 *.jar
+*.swp
+*.orig
+.gitignore
+*.swn
+*appengine-generated*
+*classes*
