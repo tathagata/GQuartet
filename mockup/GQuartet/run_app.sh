@@ -1,6 +1,4 @@
 
 
-cd ~/fsf/src/appengine-java-sdk-1.6.1/bin
-
-./dev_appserver.sh ~/projects/google/GQuartet/mockup/GQuartet/war/
+/home/tathagata/Desktop/school/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.6.0.v201111171704r37/appengine-java-sdk-1.6.0/bin/dev_appserver.sh ~/projects/gcc/mockup/GQuartet/war/
 
