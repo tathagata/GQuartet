@@ -120,3 +120,7 @@ if ( "getTalks".equals(action) )
 */
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master

@@ -112,8 +112,9 @@ public class TestPDF extends HttpServlet {
          throw new Exception("Document object not initialized");
        }
 
-        HttpSession session = req.getSession(true);
-        documentList.loginWithAuthSubToken((String)session.getValue("DOC_SESSION_TOKEN"));
+        //HttpSession session = req.getSession(true);
+        //documentList.loginWithAuthSubToken((String)session.getValue("DOC_SESSION_TOKEN"));
+    	documentList.login("gquartetbeta@gmail.com", "Google!234");
 
        InputStream inStream =documentList.getPresentation(resourceId,"pdf");  //"presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA", "pdf");
 
@@ -132,6 +133,7 @@ public class TestPDF extends HttpServlet {
       }
       catch ( Exception ex )
        {
+	  
           resp.setContentType("text/plain");
           resp.getWriter().println("Exception occurred  "  + ex.getMessage()) ; 
        }
