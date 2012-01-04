@@ -1,0 +1,19 @@
+#!/bin/bash
+#TODO: put this in the ant file or maven
+gdata_path=/home/tathagata/projects/google/gdata/java/lib
+web_inf_path=/home/tathagata/projects/gcc/mockup/GQuartet/war/WEB-INF/lib
+
+cp $gdata_path/gdata-books-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-books-meta-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-calendar-2.0.jar $web_inf_path/.
+cp $gdata_path/gdata-calendar-meta-2.0.jar $web_inf_path/.
+cp $gdata_path/gdata-client-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-client-meta-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-contacts-3.0.jar $web_inf_path/.
+cp $gdata_path/gdata-contacts-meta-3.0.jar $web_inf_path/.
+cp $gdata_path/gdata-core-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-docs-3.0.jar $web_inf_path/.
+cp $gdata_path/gdata-docs-meta-3.0.jar $web_inf_path/.
+cp $gdata_path/gdata-media-1.0.jar $web_inf_path/.
+cp $gdata_path/gdata-photos-meta-2.0.jar $web_inf_path/.
+cp $gdata_path/../deps/google-collect-1.0-rc1.jar $web_inf_path/.

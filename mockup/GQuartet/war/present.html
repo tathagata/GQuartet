@@ -1,0 +1,37 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>GQuartet</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />i
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+</head> 
+<body> 
+<script>
+$(document).bind("mobileinit", function(){
+  //apply overrides here
+$("#question-input").hide();
+});
+</script>
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>Present</h1>
+	</div><!-- /header -->
+	
+		<div class="center-wrapper" data-role="controlgroup" data-type="horizontal">
+			<a href="index.html" data-role="button" data-icon="check">Prev</a>
+			<a href="index.html" data-role="button" data-icon="info">Oops!</a>
+			<a id="question" href="index.html" data-role="button" data-icon="plus">Next</a>
+		</div>
+
+	</div>
+
+	</div><!-- /content -->
+	
+</div><!-- /page -->
+
+</body>
+</html>
