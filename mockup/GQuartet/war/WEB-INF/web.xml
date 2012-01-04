@@ -14,6 +14,11 @@
         <servlet-class>com.gquartet.TestPDF</servlet-class>
       </servlet>
 
+    <servlet>
+        <servlet-name>Navigator</servlet-name>
+        <servlet-class>com.gquartet.Navigator</servlet-class>
+      </servlet>
+
 
     <servlet>
         <servlet-name>TestGQDataStoreServlet</servlet-name>
@@ -34,6 +39,15 @@
         <servlet-name>GQuartetServlet</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>Navigator</servlet-name>
+        <url-pattern>/navigator</url-pattern>
+     </servlet-mapping>
+
+
+
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
