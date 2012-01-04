@@ -17,7 +17,7 @@ public class Question
 
 
   //attributes that are populated in some instances
-  List<Comment> comments = new ArrayList<Comment>();
+  public List<Comment> comments = new ArrayList<Comment>();
 
   public static Question GetQuestion(Entity entity)
   {

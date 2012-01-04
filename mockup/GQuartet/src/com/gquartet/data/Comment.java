@@ -14,6 +14,9 @@ public class Comment
   public String commentText;;
   public long rating;
   public Date datePosted;
+  
+  //TODO: userID
+
 
   public static Comment GetComment(Entity entity)
   {

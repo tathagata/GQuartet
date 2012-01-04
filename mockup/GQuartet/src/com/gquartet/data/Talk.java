@@ -16,7 +16,7 @@ public class Talk
   public Date slideChangedDate = new Date();
 
   //attributes that are populated in some scenarios
-  List<Slide> slides = new ArrayList<Slide>();
+  public List<Slide> slides = new ArrayList<Slide>();
 
   public static Entity GetEntity( String resourceId, Date sessionDate, String talkName, long slideNo, Date slideChanged)
   {
@@ -43,6 +43,8 @@ public class Talk
        t.resourceId = (String)entity.getProperty("DocumentId");
        t.talkName = (String)entity.getProperty("Name");
        t.dateTime = (Date)entity.getProperty("Date");
+       t.activeSlideNo = (Long)entity.getProperty("ActiveSlideNo");
+       t.slideChangedDate = (Date)entity.getProperty("SlideChanged");
 
        return t;
   }

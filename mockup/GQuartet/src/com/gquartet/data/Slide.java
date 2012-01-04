@@ -11,11 +11,11 @@ import java.lang.StringBuilder;
 
 public class Slide
 {
-  String key;
-  long SlideNo;
+  public String key;
+  public long SlideNo;
 
   //attributes that are populated in some instances
-  List<Question> questions = new ArrayList<Question>();
+  public List<Question> questions = new ArrayList<Question>();
 
 
   public static Slide GetSlide(Entity entity)
