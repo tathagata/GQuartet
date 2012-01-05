@@ -35,7 +35,7 @@
     </tr>
     <% } %>
   </table>
-  <a href="javascript:history.go(-1)">GO back</a>%>
+  <a href="navigator.jsp?talkKey=<%=talkKey%>">GO back</a>
   </html>
     <%
     }
