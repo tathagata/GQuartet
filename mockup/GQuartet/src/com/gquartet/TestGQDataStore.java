@@ -53,6 +53,12 @@ public class TestGQDataStore extends HttpServlet {
        data.append("Question Key ").append(key).append("\n");
      }
 
+    if ( "addFeed".equals(action) )
+     {
+       String key  = GQDataStore.AddFeed((String)req.getParameter("parentKey"), (String)req.getParameter("feedText"), Integer.parseInt(req.getParameter("rating")));
+       data.append("Feed Key ").append(key).append("\n");
+     }
+
   if ( "addComment".equals(action) )
        {
          String key  = GQDataStore.AddComment((String)req.getParameter("parentKey"), (String)req.getParameter("commentText"), Integer.parseInt(req.getParameter("rating")));
@@ -83,6 +89,16 @@ public class TestGQDataStore extends HttpServlet {
 
         data.append("Question has been updated with new rating");
      }
+
+     if ( "updateFeedRating".equals(action) )
+     {
+        long rating = Long.parseLong(req.getParameter("rating"));
+        String key = req.getParameter("feedKey");
+        GQDataStore.UpdateQuestionRating(key, rating);
+
+        data.append("Feed has been updated with new rating");
+     }
+ 
  
       if ( "updateCommentRating".equals(action) )
      {
@@ -92,8 +108,29 @@ public class TestGQDataStore extends HttpServlet {
 
         data.append("Question has been updated with new rating");
      }
+
+
+     //search based queries
+     if ( "getTalkByTalkName".equals(action) )
+     {
+          Talk t  = GQDataStore.GetTalkByTalkName((String)req.getParameter("talkname"));
+          if ( t != null )
+            data.append(t.talkName).append(" ").append(t.resourceId).append(" ").append(t.dateTime).append("\n"); 
+          else
+            data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
+     }
+    
+     if ( "searchCourse".equals(action) )
+     {
+       log.warning("Search fot text === "  + req.getParameter("searchText") );
+       List<SearchResult>  l = GQDataStore.SearchText(req.getParameter("searchText"));
       
-     
+       for ( SearchResult r : l )
+       {
+         data.append(r.talkKey).append(", ").append(r.talkName).append(", ").append(r.slideNo).append(", ").append(r.text).append("\n");
+       }
+
+     }
 
     resp.setContentType("text/plain");
 		resp.getWriter().println("Hello, world");

@@ -16,6 +16,7 @@ public class Slide
 
   //attributes that are populated in some instances
   public List<Question> questions = new ArrayList<Question>();
+  public List<Feed> feeds = new ArrayList<Feed>();
 
 
   public static Slide GetSlide(Entity entity)
@@ -47,6 +48,13 @@ public class Slide
     {
       b.append("\t").append(q.toString()).append("\n");
     }
+
+    b.append("\n");
+    for ( Feed f : feeds )
+    {
+      b.append("\t").append(f.toString()).append("\n");
+    }
+
 
     return b.toString();
   }

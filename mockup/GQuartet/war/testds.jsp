@@ -44,6 +44,22 @@
     <input type="submit" value="Submit">
   </form>
 
+
+
+  <form action="/testdb?action=addFeed" method="post">
+    <p>Add Question</p>
+    Slide Key
+    <input type="text" name="parentKey"/>
+    Question Text
+    <input type="text" name="feedText"/>
+    Rating
+    <input type="text" name="rating" value=0>
+
+    <input type="submit" value="Submit">
+  </form>
+
+
+
  <form action="/testdb?action=getSlideContent" method="post">
     <p>Show All Questions And Comments By Slide No</p>
     <input type="text" name="parentKey"/>
@@ -78,16 +94,37 @@
     <input type="submit" value="Submit">
   </form>
 
+  <form action="/testdb?action=updateFeedRating" method="post">
+    <p>Update Feed Rating</p>
+    Question Key
+    <input type="text" name="feedKey"/>
+    New Rating
+    <input type="text" name="rating"/>
+    <input type="submit" value="Submit">
+  </form>
 
+  <p> Get All Talks</p>
+  <form action="/testdb?action=getTalkByTalkName" method="post">
+    <p>Get Talk by Talk Name</p>
+     <input type="text" name="talkname"/>
+    <input type="submit" value="Submit">
+  </form>
 
+  <form action="/testdb?action=searchByTalkKey" method="post">
+    <p> Search Text By Talk</p>
+    <input type="text" name="talkKey"/>
+    <input type="text" name="searchText"/>
+    <input type="submit" value="Submit">
+  </form>
 
-
-
-
-
+  <form action="/testdb?action=searchCourse" method="post">
+    <p> Search Text Across the Course</p>
+    <input type="text" name="talkKey"/>
+    <input type="text" name="searchText"/>
+    <input type="submit" value="Submit">
+  </form>
 
   <!--
-
  <form action="/testdb?action=getTalkContent" method="post">
     <p>Show All Content for Talk</p>
     <input type="text" name="parentKey"/>
