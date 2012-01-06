@@ -7,19 +7,13 @@
 
 'use strict';
 
-<% String protocol = request.getScheme();
-   String domain = request.getDomain();
-   String port=Integer.toString(request.getServerPort());
 
-   String path=protocol + "://" + domain + ":" + port + "/testpdf";
-%>
-
-PDFJS.getPdf(<%=path%>, function getPdfHelloWorld(data) {
+PDFJS.getPdf("http://localhost:8080/testpdf?action=getPdf&resourceId=presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA",activepage ,function getPdfHelloWorld(data) {
   //
   // Instantiate PDFDoc with PDF data
   //
   var pdf = new PDFJS.PDFDoc(data);
-  var page = pdf.getPage(1);
+  var page = pdf.getPage(activepage);
   var scale = 1.5;
 
 

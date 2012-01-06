@@ -21,6 +21,7 @@
 		talkKey =  GQDataStore.AddNewTalk("presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA"
                 , new Date() 
                 , "GoogleDemo" + new Date());
+		
 	}
 	talk = GQDataStore.GetTalkByKey(talkKey);
 %>

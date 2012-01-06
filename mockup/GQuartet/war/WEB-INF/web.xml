@@ -18,6 +18,12 @@
         <servlet-name>Navigator</servlet-name>
         <servlet-class>com.gquartet.Navigator</servlet-class>
       </servlet>
+     
+     <servlet>
+        <servlet-name>GetTalkInfo</servlet-name>
+        <servlet-class>com.gquartet.GetTalkInfo</servlet-class>
+      </servlet>
+
 
 
     <servlet>
@@ -43,6 +49,11 @@
      <servlet-mapping>
         <servlet-name>Navigator</servlet-name>
         <url-pattern>/navigator</url-pattern>
+     </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>GetTalkInfo</servlet-name>
+        <url-pattern>/getTalkInfo</url-pattern>
      </servlet-mapping>
 
 

@@ -86,6 +86,7 @@ var PDFView = {
   },
 
   set page(val) {
+	//console.log("set page called with"+val)
     var pages = this.pages;
     var input = document.getElementById('pageNumber');
     if (!(0 < val && val <= pages.length)) {
@@ -150,6 +151,7 @@ var PDFView = {
   },
 
   navigateTo: function pdfViewNavigateTo(dest) {
+	console.log("NavigateTo called");
     if (typeof dest === 'string')
       dest = this.destinations[dest];
     if (!(dest instanceof Array))
