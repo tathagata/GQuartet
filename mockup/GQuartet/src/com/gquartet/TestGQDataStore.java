@@ -7,13 +7,15 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.*;
 import com.gquartet.data.*;
-
+import com.google.gdata.data.Link;
 
 import java.io.IOException;
 import javax.servlet.http.*;
 import java.util.logging.Logger;
 import java.util.*;
-
+import com.google.gdata.data.docs.DocumentEntry;
+import com.google.gdata.data.docs.DocumentListEntry;
+import com.google.gdata.data.docs.DocumentListFeed;
 
 @SuppressWarnings("serial")
 public class TestGQDataStore extends HttpServlet {
@@ -119,7 +121,9 @@ public class TestGQDataStore extends HttpServlet {
           else
             data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
      }
-    
+   
+     try
+      {
      if ( "searchCourse".equals(action) )
      {
        log.warning("Search fot text === "  + req.getParameter("searchText") );
@@ -130,6 +134,31 @@ public class TestGQDataStore extends HttpServlet {
          data.append(r.talkKey).append(", ").append(r.talkName).append(", ").append(r.slideNo).append(", ").append(r.text).append("\n");
        }
 
+      Map<String,String> searchParam= new HashMap<String,String>();
+      searchParam.put("q", req.getParameter("searchText"));
+      DocumentList documentList = new DocumentList(
+                  "JavaGDataClientSampleAppV3.0" , "docs.google.com");
+      documentList.login("gquartetbeta@gmail.com", "Google!234");
+      DocumentListFeed feed =  documentList.search(searchParam);
+      
+      StringBuffer s = new StringBuffer();
+      if ( feed !=  null )
+      {
+          s.append("List of Documents <br>");
+          
+          for ( DocumentListEntry entry: feed.getEntries())
+          {
+              s.append(printDocumentEntry(entry));
+              s.append("<br>");
+          }
+
+          data.append(s.toString());
+     }
+     }
+     }
+     catch( Exception e)
+     {
+       log.warning("Exception while searching for documents" + e.getMessage());
      }
 
     resp.setContentType("text/plain");
@@ -150,6 +179,24 @@ public class TestGQDataStore extends HttpServlet {
 		resp.getWriter().println("Hello, world");
 
 	}
+
+ public String printDocumentEntry(DocumentListEntry doc) {
+       StringBuffer output = new StringBuffer();
+
+           output.append(" -- " + doc.getTitle().getPlainText() + " ");
+               if (!doc.getParentLinks().isEmpty()) {
+                       for (Link link : doc.getParentLinks()) {
+                                 output.append("[" + link.getTitle() + "] ");
+                                       }
+                           }
+                   output.append(", ResourceId=");
+                       output.append(doc.getResourceId());
+
+                       return output.toString();
+ }
+
+
+
 }
 
 
