@@ -59,7 +59,7 @@ $("#question-input").hide();
     <% for ( DocumentListEntry entry : feed.getEntries() ) { %>
   
     <li>
-      <a href="/testpdf?action=getPdf&resourceId=<%=entry.getResourceId()%>"><%=entry.getTitle().getPlainText()%></a> 
+      <a href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=entry.getTitle().getPlainText()%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
     
     </li>
     <% } %>

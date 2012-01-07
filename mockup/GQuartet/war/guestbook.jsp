@@ -5,7 +5,16 @@
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ include file="header.jsp"%>
-
+<%
+	String talkKey = "";
+	if ((request.getParameter("talkKey"))!=null){
+		talkKey = request.getParameter("talkKey");
+		out.println(talkKey);
+	}else{
+		out.println(talkKey+"is this");
+		response.setHeader("Refresh", "0; URL=../index.html");
+	}
+%>
 <div class="sidebar">
         <div class="well">
           <h5>Controls</h5>
@@ -29,7 +38,7 @@
 
 <div class="content">
 	<div class="hero-unit">
-            <iframe id="slide" src="viewer/viewer.jsp" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
+            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
 		<div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
 
         </div>
