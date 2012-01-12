@@ -85,20 +85,93 @@ public class GQDataStore {
     return null;
   }
 
+  public static Entity GetEntityByKey(Key k)
+  {
+    try
+    {
+      return datastore.get(k);
+    }
+    catch ( Exception ex)
+    {
+      log.warning("The entity for the requested key " + k.toString() + " does not exist");
+      log.warning(ex.getMessage());
+    }
+
+    return null;
+  }
+
+
+
 
   public static Talk GetTalkByTalkName(String talkName)
   {
      Map<String, Talk> talks = new HashMap<String, Talk>();
      Query query = new Query("Talk");
+     query.addFilter("Name", Query.FilterOperator.EQUAL, talkName);
+
      for (Entity entity : datastore.prepare(query).asIterable()) 
      {
        if ( talkName.equals(entity.getProperty("Name") ))
            {
+             log.warning("Print for each entry with same name....");
              return Talk.GetTalk(entity);
            }
      }
 
      return null;
+  }
+
+  public static List<SearchResult> SearchText(String searchText)
+  {
+     List<SearchResult> results = new ArrayList<SearchResult>();
+     
+     results.addAll(GQDataStore.SearchText(searchText,"Question", "Text"));
+     results.addAll(GQDataStore.SearchText(searchText,"Comment", "Text"));
+     results.addAll(GQDataStore.SearchText(searchText,"Feed", "Text"));
+
+    return results;
+
+  }
+
+  public static List<SearchResult> SearchText(String searchText,String entityName, String propertyName)
+  {
+    
+    List<SearchResult> results = new ArrayList<SearchResult>();
+    
+    Query query = new Query(entityName);
+    query.addFilter(propertyName, Query.FilterOperator.GREATER_THAN_OR_EQUAL, searchText);
+    query.addFilter(propertyName, Query.FilterOperator.LESS_THAN, searchText + "\ufffd" ) ;
+
+     List<Entity> list = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+     log.warning("Overe here , the size was list = " + list.size());
+     for (Entity entity : list) 
+     {
+       if ( entity.getKind().equals("Question") )
+           {
+             Question question = Question.GetQuestion(entity);
+             Slide slide = Slide.GetSlide( GetEntityByKey(entity.getParent()) );
+             Talk talk =  Talk.GetTalk(GetEntityByKey(entity.getParent().getParent()));
+             results.add(new SearchResult(talk.key, talk.talkName, slide.SlideNo, question.questionText));
+           }
+        else if ( entity.getKind().equals("Comment") )
+        {
+             Comment comment = Comment.GetComment(entity);
+             Slide slide = Slide.GetSlide( GetEntityByKey(entity.getParent().getParent()) );
+             Talk talk =  Talk.GetTalk(GetEntityByKey(entity.getParent().getParent().getParent()));
+             results.add(new SearchResult(talk.key, talk.talkName, slide.SlideNo, comment.commentText));
+        }
+       else if ( entity.getKind().equals("Feed") )
+       {
+             Feed feed = Feed.GetFeed(entity);
+             Slide slide = Slide.GetSlide( GetEntityByKey(entity.getParent()) );
+             Talk talk =  Talk.GetTalk(GetEntityByKey(entity.getParent().getParent()));
+             results.add(new SearchResult(talk.key, talk.talkName, slide.SlideNo, feed.feedText));
+       }
+    
+     }
+
+     return results;
+
   }
 
   public static String AddSlide(String talkKey, Integer slideNo)
@@ -124,6 +197,13 @@ public class GQDataStore {
       return KeyFactory.keyToString(entity.getKey());
   }
 
+  public static String AddFeed(String slideKey, String text, int rating)
+  {
+      Entity entity = Feed.GetEntity(slideKey, text, rating);
+      datastore.put(entity);
+
+      return KeyFactory.keyToString(entity.getKey());
+  }
 
 
   public static Slide GetSlideQuestionsAndComments(String talkKey, long slideNo)
@@ -196,6 +276,13 @@ public class GQDataStore {
   {
       Entity e =  GetEntityByKey(questionKey);
       Question.UpdateRating(e, rating);
+      datastore.put(e);
+  }
+
+  public static void UpdateFeedRating(String feedKey, long rating)
+  {
+      Entity e =  GetEntityByKey(feedKey);
+      Feed.UpdateRating(e, rating);
       datastore.put(e);
   }
 
