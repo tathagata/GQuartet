@@ -43,9 +43,6 @@ $("#question-input").hide();
 });
 </script>
 <div data-role="page">
-
-
-
 	<div data-role="header">
 		<h1>View</h1>
 	</div><!-- /header -->
@@ -56,10 +53,15 @@ $("#question-input").hide();
   <div class="content-primary">
 		<ul data-role="listview" data-theme="c">  
 
-    <% for ( DocumentListEntry entry : feed.getEntries() ) { %>
+    <% 
+	String talkName = "";
+	for ( DocumentListEntry entry : feed.getEntries() ) { 
+
+	talkName = entry.getTitle().getPlainText().replaceAll("[^a-zA-Z0-9]+","");
+	%>
   
     <li>
-      <a href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=entry.getTitle().getPlainText()%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
+      <a href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
     
     </li>
     <% } %>

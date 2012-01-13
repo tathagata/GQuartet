@@ -18,7 +18,7 @@
 		out.println(talkKey);
 	}else{
 		out.println(talkKey+"is this");
-		response.setHeader("Refresh", "0; URL=../index.html");
+		response.setHeader("Refresh", "0; URL=../index.jsp");
 	}
 %>
 
@@ -65,11 +65,12 @@ function getCurrentPage(){
 		success: function(data){
 			console.log(data);
 			PDFView.page =data;
+			
 			setTimeout('getCurrentPage()',200);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
                         //addmsg("error", textStatus + " (" + errorThrown + ")");
-                        alert("TalkKey"+talkKey);
+                        //alert("TalkKey:"+talkKey);
 			setTimeout(
                         'getCurrentPage()', /* Try again after.. */
                         "15000"); /* milliseconds (15seconds) */
@@ -78,6 +79,8 @@ function getCurrentPage(){
 			
 	});
 }
+
+
 </script>
 </head>
 
@@ -136,23 +139,21 @@ function getCurrentPage(){
 		</button>
 
 		<div class="separator"></div>
-
 		<input type="number" id="pageNumber"
 			onchange="PDFView.page = this.value;" value="1" size="4" min="1">
 
 		<span>/</span> <span id="numPages">--</span>
 
 		<div class="separator"></div>
-
 		<button id="zoomOut" class="btn primary" title="Zoom Out"
 			onclick="PDFView.zoomOut();" oncontextmenu="return false;">
 			<img src="images/zoom-out.svg" align="top" height="16">
 		</button>
+		
 		<button id="zoomIn" class="btn primary" title="Zoom In"
 			onclick="PDFView.zoomIn();" oncontextmenu="return false;">
 			<img src="images/zoom-in.svg" align="top" height="16">
 		</button>
-
 		<div class="separator"></div>
 
 		<select id="scaleSelect" onchange="PDFView.parseScale(this.value);"

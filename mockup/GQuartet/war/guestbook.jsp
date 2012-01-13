@@ -1,44 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="javax.jdo.PersistenceManager" %>
-<%@ page import="com.google.appengine.api.users.User" %>
-<%@ page import="com.google.appengine.api.users.UserService" %>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@page import="com.google.appengine.api.datastore.DatastoreService"%>
+<%@page import="com.google.appengine.api.datastore.DatastoreServiceFactory"%>
+<%@page import="com.google.appengine.api.datastore.*"%>
+<%@page import="com.gquartet.data.*"%>
+<%@page import="java.io.IOException"%>
 <%@ include file="header.jsp"%>
 <%
+	String talkName = "";
+	String resourceId = "";
 	String talkKey = "";
-	if ((request.getParameter("talkKey"))!=null){
-		talkKey = request.getParameter("talkKey");
-		out.println(talkKey);
+	if ((request.getParameter("talkName"))!=null){
+		talkName = request.getParameter("talkName");
+		Talk t = GQDataStore.GetTalkByTalkName(talkName); 
+		if(t!=null){
+			resourceId = t.resourceId;
+			talkKey = t.key;
+		}else{
+			out.println("<center>Talkname:"+talkName+"</center>");
+		}
+		
 	}else{
-		out.println(talkKey+"is this");
-		response.setHeader("Refresh", "0; URL=../index.html");
+		response.setHeader("Refresh", "0; URL=../index.jsp");
 	}
 %>
-<div class="sidebar">
-        <div class="well">
-          <h5>Controls</h5>
-          <ul>
-
-            <li><a href="http://blackboard.uic.edu">Blackboard</a></li>
-            <li><a href="http://mail.google.com">Gmail</a></li>
-            <li><a href="http://docs.google.com">Google Docs</a></li>
-            <li><a href="http://en.wikipedia.org">Wikipedia</a></li>
-          </ul>
-          <h5>Google Calendar</h5>
-<iframe src="https://www.google.com/calendar/embed?src=qkdih1tgs5mn5llccl60mm7ods%40group.calendar.google.com&ctz=America/Chicago" style="border: 0" width="200" height="350" frameborder="0" scrolling="no"></iframe>
-          <h5>Sidebar</h5>
-          <ul>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-          </ul>
-
-        </div>
-      </div>
 
 <div class="content">
 	<div class="hero-unit">
-            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
+            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
 		<div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
 
         </div>

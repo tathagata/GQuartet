@@ -150,7 +150,7 @@
 			<button id="previous" data-theme="a" type="submit">Prev</button>
 			<a href="questions.jsp?talkKey=<%=talkKey%>&slideNo=<%=talk.activeSlideNo%>" data-role="button" data-icon="info">Show Q</a>
 			<button id="next" data-theme="a" type="submit" onlclick="alert('Fuck!');">Next</button>
-		<div id="notification"><label id="Slide Number">Slide Number</label><%=talk.activeSlideNo%></div>
+		<div id="notification"><label id="SlideNo:">Slide Number</label><%=talk.activeSlideNo%></div>
 		</div>
 	</div>
 

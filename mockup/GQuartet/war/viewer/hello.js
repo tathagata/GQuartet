@@ -8,7 +8,7 @@
 'use strict';
 
 
-PDFJS.getPdf("http://localhost:8080/testpdf?action=getPdf&resourceId=presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA",activepage ,function getPdfHelloWorld(data) {
+PDFJS.getPdf("http://192.168.1.64:8080/testpdf?action=getPdf&resourceId=presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA",activepage ,function getPdfHelloWorld(data) {
   //
   // Instantiate PDFDoc with PDF data
   //

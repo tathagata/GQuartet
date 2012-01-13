@@ -33,7 +33,7 @@ public class GQDataStore {
 
   public static String AddNewTalk(String resourceId, Date talkDate, String talkName )
   {
-     Entity talk = Talk.GetEntity(resourceId, talkDate, talkName, 0, new Date());
+     Entity talk = Talk.GetEntity(resourceId, talkDate, talkName, 1, new Date());
      datastore.put(talk);
 
      return KeyFactory.keyToString(talk.getKey());
@@ -108,9 +108,10 @@ public class GQDataStore {
      Map<String, Talk> talks = new HashMap<String, Talk>();
      Query query = new Query("Talk");
      query.addFilter("Name", Query.FilterOperator.EQUAL, talkName);
-
+	log.warning(talkName +"will be compared now");
      for (Entity entity : datastore.prepare(query).asIterable()) 
      {
+	System.out.println(entity.getProperty("Name")+" "+talkName);
        if ( talkName.equals(entity.getProperty("Name") ))
            {
              log.warning("Print for each entry with same name....");
@@ -118,6 +119,7 @@ public class GQDataStore {
            }
      }
 
+	log.warning(talkName +"comparison is over");
      return null;
   }
 
