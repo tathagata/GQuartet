@@ -35,7 +35,7 @@
     </tr>
     <% } %>
   </table>
-  <a href="javascript:history.go(-1)">GO back</a>%>
+  <a href="navigator.jsp?talkKey=<%=talkKey%>">GO back</a>
   </html>
     <%
     }
@@ -52,7 +52,7 @@
             Invalid data passed, User Query String should be : <br><br> talkKey=&lt;talkKey&gt;&slideNo=&lt;slideNo&gt;
           </i>
         </body>
-        <a href="javascript:history.go(-1)">GO back</a>%>
+  <a href="navigator.jsp?talkKey=<%=talkKey%>">GO back</a>
       </html>
 
     <% } %>

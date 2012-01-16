@@ -3,7 +3,7 @@
 
 'use strict';
 
-var kDefaultURL = 'compressed.tracemonkey-pldi-09.pdf';
+//var kDefaultURL = 'compressed.tracemonkey-pldi-09.pdf';
 var kDefaultScale = 1.0;
 var kDefaultScaleDelta = 1.1;
 var kCacheSize = 20;
@@ -86,6 +86,7 @@ var PDFView = {
   },
 
   set page(val) {
+	//console.log("set page called with"+val)
     var pages = this.pages;
     var input = document.getElementById('pageNumber');
     if (!(0 < val && val <= pages.length)) {
@@ -150,6 +151,7 @@ var PDFView = {
   },
 
   navigateTo: function pdfViewNavigateTo(dest) {
+	console.log("NavigateTo called");
     if (typeof dest === 'string')
       dest = this.destinations[dest];
     if (!(dest instanceof Array))
@@ -783,7 +785,9 @@ window.addEventListener('load', function webViewerLoad(evt) {
   }
 
   var scale = ('scale' in params) ? params.scale : kDefaultScale;
-  PDFView.open(params.file || kDefaultURL, parseFloat(scale));
+	if ('resourceId' in params) alert(params.resourceId);
+  //PDFView.open(params.file || kDefaultURL, parseFloat(scale));
+  PDFView.open("/testpdf?action=getPdf&resourceId="+params.resourceId, parseFloat(scale));
 
   if (!window.File || !window.FileReader || !window.FileList || !window.Blob)
     document.getElementById('fileInput').setAttribute('hidden', 'true');
