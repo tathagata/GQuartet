@@ -271,6 +271,53 @@ public class GQDataStore {
       Talk.UpdateActiveSlide(e, slideNo);
       datastore.put(e);
   }
+  
+  public static void UpdateLikes(String talkKey, long slideNo, long value)
+  {
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         Slide requiredSlide = Slide.GetSlide(e);
+         if ( requiredSlide.likes + value > 0 )
+           e.setProperty("Likes", requiredSlide.likes + value );
+         else 
+           e.setProperty("Likes",0);
+         
+         datastore.put(e);
+         break;
+      }
+    }
+  }
+
+  public static void UpdateDislikes(String talkKey, long slideNo, long value)
+  {
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         Slide requiredSlide = Slide.GetSlide(e);
+         if ( requiredSlide.dislikes + value > 0 )
+           e.setProperty("Dislikes", requiredSlide.dislikes + value );
+         else 
+           e.setProperty("Dislikes",0);
+         
+         datastore.put(e);
+         break;
+
+      }
+    }
+  }
+
+
+
+
+
+
 
   public static void UpdateQuestionRating(String questionKey, long rating)
   {

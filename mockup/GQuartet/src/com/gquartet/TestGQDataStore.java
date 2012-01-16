@@ -121,6 +121,27 @@ public class TestGQDataStore extends HttpServlet {
           else
             data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
      }
+
+     if ( "updateLikes".equals(action) )
+     {
+        long count = Long.parseLong(req.getParameter("count"));
+        String key = req.getParameter("talkKey");
+        long slideNo = Long.parseLong(req.getParameter("SlideNo"));
+        GQDataStore.UpdateLikes(key, slideNo, count);
+
+        data.append("Slide has been updated with new like value");
+     }
+
+
+     if ( "updateDislikes".equals(action) )
+     {
+        long count = Long.parseLong(req.getParameter("count"));
+        String key = req.getParameter("talkKey");
+        long slideNo = Long.parseLong(req.getParameter("SlideNo"));
+        GQDataStore.UpdateDislikes(key, slideNo, count);
+        data.append("Slide has been updated with new like value");
+     }
+
    
      try
       {
@@ -164,8 +185,6 @@ public class TestGQDataStore extends HttpServlet {
     resp.setContentType("text/plain");
 		resp.getWriter().println("Hello, world");
     resp.getWriter().println(data.toString());
-
-
 
   }
  
