@@ -10,6 +10,8 @@
 <%@page import="java.util.*"%>
 
 
+
+
 <!DOCTYPE HTML> 
 <html>
   <head>
@@ -19,6 +21,14 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" ></script>	
   </head>
   <body>
+	<form action="slideshow.jsp" method="post">
+	<fieldset>
+	<label for="talkName" id="talk_Name" >TalkName</label>  
+	    	<input type="text" name="talkName" /> 
+		<input type="submit" />
+	</fieldset>
+	</form>
+	<hr>
 	<form action="guestbook.jsp" method="post">
 	<fieldset>
 	<label for="talkName" id="talk_Name" >TalkName</label>  

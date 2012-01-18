@@ -12,18 +12,6 @@
 
 
 
-<%
-	
-	String talkKey = "";
-	if ((request.getParameter("talkKey"))!=null){
-		talkKey = request.getParameter("talkKey");
-	}else{
-		out.println(talkKey+"is this");
-		response.setHeader("Refresh", "0; URL=../index.jsp");
-	}
-%>
-
-
 
 
 <!DOCTYPE html>
@@ -45,44 +33,8 @@
 	PDFJS.workerSrc = "pdf.js";
 </script>
 <script type="text/javascript" src="viewer.js"></script>
-<script>
-var talkKey = "<%=talkKey%>";
-console.log(talkKey);
-$(document).ready(function(){
-	getCurrentPage();
-});
 
 
-function getCurrentPage(){
-
-	var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
-	console.log(_url);
-	$.ajax({
-		type:"GET",
-		url:_url,
-		async:true,
-		cache: false,
-		timeout: 500,
-		success: function(data){
-			console.log(data);
-			PDFView.page =data;
-			
-			setTimeout('getCurrentPage()',200);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-                        //addmsg("error", textStatus + " (" + errorThrown + ")");
-                        //alert("TalkKey:"+talkKey);
-			setTimeout(
-                        'getCurrentPage()', /* Try again after.. */
-                        "15000"); /* milliseconds (15seconds) */
-                },
-
-			
-	});
-}
-
-
-</script>
 </head>
 
 <body>
