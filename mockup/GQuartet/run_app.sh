@@ -1,4 +1,4 @@
+#sudo service jetty stop
 
-cd ~/fsf/src/appengine-java-sdk-1.6.1/bin
+/scratch/tdg/projects/gquartet/appengine/bin/dev_appserver.sh --port=8888  -a 50.22.121.112 war/
 
-./dev_appserver.sh ~/projects/google/GQuartet/mockup/GQuartet/war

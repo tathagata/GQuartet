@@ -116,7 +116,6 @@ public class GQDataStore {
 	log.warning(talkName +"will be compared now");
      for (Entity entity : datastore.prepare(query).asIterable()) 
      {
-	System.out.println(entity.getProperty("Name")+" "+talkName);
        if ( talkName.equals(entity.getProperty("Name") ))
            {
              log.warning("Print for each entry with same name....");
