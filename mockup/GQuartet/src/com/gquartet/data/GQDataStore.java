@@ -36,6 +36,11 @@ public class GQDataStore {
      Entity talk = Talk.GetEntity(resourceId, talkDate, talkName, 1, new Date());
      datastore.put(talk);
 
+     for ( int i=1; i <= 50 ; i++ )
+     {
+       AddSlide ( KeyFactory.keyToString(talk.getKey()), i);
+     }
+
      return KeyFactory.keyToString(talk.getKey());
 
   }
