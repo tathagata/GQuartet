@@ -20,7 +20,10 @@
 	}else{
 		out.println(talkKey+"is this");
 		response.setHeader("Refresh", "0; URL=../index.jsp");
-	}
+    }
+
+    String slideNo = request.getParameter("slideNo");
+
 %>
 
 
@@ -48,38 +51,46 @@
 <script>
 var talkKey = "<%=talkKey%>";
 console.log(talkKey);
-$(document).ready(function(){
-	//getCurrentPage();
-	window.page = PDFView.page;
+var called = 0;
+var slideNo = "<%=slideNo%>";
+
+  $(document).ready(function(){
+	getCurrentPage();
+  window.page = PDFView.page;
+  //PDFView.page = 5;
+  console.log("here after setting page "+ PDFView.page);
 });
 
 
 function getCurrentPage(){
 
-	var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
-	console.log(_url);
-	$.ajax({
-		type:"GET",
-		url:_url,
-		async:true,
-		cache: false,
-		timeout: 500,
-		success: function(data){
-			console.log(data);
-			PDFView.page =data;
-			
-			setTimeout('getCurrentPage()',200);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
+	//var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
+	//console.log(_url);
+	//$.ajax({
+	//	type:"GET",
+	//	url:_url,
+	//	async:true,
+	//	cache: false,
+	//	timeout: 500,
+	//	success: function(data){
+			console.log(called);
+      PDFView.page = slideNo;
+
+  if(called<2){
+    setTimeout('getCurrentPage()',500);
+    called=called+1; console.log('called is ' + called);
+   }  
+	//	},
+	//	error: function(XMLHttpRequest, textStatus, errorThrown){
                         //addmsg("error", textStatus + " (" + errorThrown + ")");
                         //alert("TalkKey:"+talkKey);
-			setTimeout(
-                        'getCurrentPage()', /* Try again after.. */
-                        "15000"); /* milliseconds (15seconds) */
-                },
+	//		setTimeout(
+    //                    'getCurrentPage()', /* Try again after.. */
+      //                  "15000"); /* milliseconds (15seconds) */
+        //        },
 
 			
-	});
+	//});
 }
 
 
@@ -130,19 +141,19 @@ function getCurrentPage(){
 	<div id="loading">Loading... 0%</div>
 	<div id="viewer"></div>
 	<div id="controls">
-		<button class="btn primary" id="previous" onclick="PDFView.page--;"
+		<button class="btn primary" id="previous" onclick="PDFView.page--;parent.changedPage();"
 			oncontextmenu="return false;">
 			<img src="images/go-up.svg" align="top" height="16"> Previous
 		</button>
 
-		<button class="btn primary" id="next" onclick="PDFView.page++;"
+		<button class="btn primary" id="next" onclick="PDFView.page++;parent.changedPage();"
 			oncontextmenu="return false;">
 			<img src="images/go-down.svg" align="top" height="16"> Next
 		</button>
 
 		<div class="separator"></div>
 		<input type="number" id="pageNumber"
-			onchange="PDFView.page = this.value;parent.changedPage();" value="1" size="4" min="1">
+    onchange="PDFView.page=this.value;parent.changedPage();return false;" value=1 size="4" min="1">
 
 		<span>/</span> <span id="numPages">--</span>
 
@@ -158,7 +169,7 @@ function getCurrentPage(){
 		</button>
 		<div class="separator"></div>
 
-		<select id="scaleSelect" onchange="PDFView.parseScale(this.value);"
+		<select id="scaleSelect" onchange="console.log('scale=' + this.value); PDFView.parseScale(this.value);"
 			oncontextmenu="return false;">
 			<option id="customScaleOption" value="custom"></option>
 			<option value="0.5">50%</option>
@@ -168,7 +179,7 @@ function getCurrentPage(){
 			<option value="1.5" selected="selected">150%</option>
 			<option value="2">200%</option>
 			<option id="pageWidthOption" value="page-width">Page Width</option>
-			<option id="pageFitOption" value="page-fit">Page Fit</option>
+			<option id="pageFitOption" value="page-fit" selected>Page Fit</option>
 		</select>
 
 		<div class="separator"></div>

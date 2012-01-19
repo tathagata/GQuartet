@@ -6,27 +6,42 @@
 <%@page import="java.util.*"%>
 <%@page import="java.io.IOException"%>
 <%@ include file="header.jsp"%>
+<%@page import="java.util.logging.Logger"%>
+
 <%
+ Logger log = Logger.getLogger("guestbook.jsp"); 
+
+
 String talkName = "";
 String resourceId = "";
 String talkKey = "";
+long slideNo = 1;
+
+  log.warning("Req Parameter Talk Name" + request.getParameter("talkName"));
+  log.warning("Req Parameter Slide No" + request.getParameter("slideNo"));
+
 if ((request.getParameter("talkName"))!=null){
-talkName = request.getParameter("talkName");
-Talk t = GQDataStore.GetTalkByTalkName(talkName); 
-if(t!=null){
-resourceId = t.resourceId;
-talkKey = t.key;
-}else{
-out.println("<center>Talkname:"+talkName+"</center>");
-}
+  talkName = request.getParameter("talkName");
+  log.warning("Talk Name:" + talkName);
+
+  Talk t = GQDataStore.GetTalkByTalkName(talkName);
+  if(t!=null){
+    resourceId = t.resourceId;
+    talkKey = t.key;
+  }else{
+    out.println("<center>Talkname:"+talkName+"</center>");
+  }
 
 }else{
-//	response.setHeader("Refresh", "0; URL=../index.jsp");
-}
+	response.setHeader("Refresh", "0; URL=../index.jsp");
+  }
+if((request.getParameter("slideNo"))!=null){
+    slideNo = Long.parseLong(request.getParameter("slideNo"));
+    }
 %>
 
 <div class="content">
-    <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" width="1500" height="810" id='frameDemo'></iframe>  
+  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="1500" height="810" id='frameDemo'></iframe>  
     <div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
 
 
@@ -51,7 +66,6 @@ out.println("<center>Talkname:"+talkName+"</center>");
         </div>
         <div id="postfeed" style="padding-left:0px;padding-bottom:10px">
           <form  id="question">
-            <input type="hidden" name="slideNo" value="1"/>
             <input type="hidden" name="rating" value=0 />
             <textarea rows="2" name="questionText" class="span15"></textarea>
             <input id="askquestion" type="submit" class="btn success" value="ASK">
@@ -65,7 +79,9 @@ out.println("<center>Talkname:"+talkName+"</center>");
 	});
 	function changedPage(){
 		pageNumber =$("#slide").contents().find("#pageNumber").val();
-		console.log("changedPage function was called and page was set to "+pageNumber);
+    console.log("changedPage function was called and page was set to "+pageNumber);
+    //$.post("guestbook.jsp", {"talkName":"<%=talkName%>","slideNo":pageNumber});
+    window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+pageNumber;
 	}	
 
 
@@ -84,8 +100,13 @@ out.println("<center>Talkname:"+talkName+"</center>");
           });
         </script>
 
-        <% Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, 1);
-	        List<Question> questions  = slide.questions;
+        <% 
+          log.warning("Slide No before calling data store " + slideNo );
+          //slideNo = 5;
+          Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, slideNo);
+          List<Question> questions  = slide.questions;
+
+          log.warning("No of questions = " + questions.size() );
 	
         	for ( Question q : questions ){
           	String QPlusSign=" +";

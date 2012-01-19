@@ -1,5 +1,5 @@
 <project name="Guestbook Highrep" default="compile">
-  <property name="appengine.sdk" location="/scratch/tdg/projects/gquartet/appengine/" />
+  <property name="appengine.sdk" location="/home/guru/fsf/src/appengine-java-sdk-1.6.1"/>
 
   <import file="${appengine.sdk}/config/user/ant-macros.xml" />
 
@@ -71,12 +71,9 @@
     </appcfg>
   </target>
 
-
   <target name="run_app"
-          depends="compile"
-          description="Starts the app engine after compiling">
-          <exec executable="./run_app.sh"/>
-  </target>
-
-
+              depends="compile"
+                        description="Starts the app engine after compiling">
+                                  <exec executable="./run_app.sh"/>
+                                    </target>
 </project>

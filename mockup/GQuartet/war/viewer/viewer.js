@@ -86,12 +86,14 @@ var PDFView = {
   },
 
   set page(val) {
-	//console.log("set page called with"+val)
+	console.log("set page called with"+val + " "+ this.pages.length)
     var pages = this.pages;
     var input = document.getElementById('pageNumber');
+    console.log(input); 
     if (!(0 < val && val <= pages.length)) {
       var event = document.createEvent('UIEvents');
       event.initUIEvent('pagechange', false, false, window, 0);
+      console.log(this.page);
       event.pageNumber = this.page;
       window.dispatchEvent(event);
       return;
@@ -106,7 +108,10 @@ var PDFView = {
     // checking if the this.page was called from the updateViewarea function:
     // avoiding the creation of two "set page" method (internal and public)
     if (updateViewarea.inProgress)
+    {
+      console.log("in update event " + val );
       return;
+    }
 
     // Avoid scrolling the first page during loading
     if (this.loading && val == 1)
@@ -818,7 +823,9 @@ function updateViewarea() {
   updateViewarea.inProgress = true; // used in "set page"
   var currentId = PDFView.page;
   var firstPage = visiblePages[0];
-  PDFView.page = firstPage.id;
+  console.log("first page " + firstPage.id );
+  console.log("currentid " + currentId);
+  PDFView.page =  firstPage.id;
   updateViewarea.inProgress = false;
 
   var kViewerTopMargin = 52;
