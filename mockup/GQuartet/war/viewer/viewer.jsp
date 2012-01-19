@@ -50,6 +50,7 @@ var talkKey = "<%=talkKey%>";
 console.log(talkKey);
 $(document).ready(function(){
 	//getCurrentPage();
+	window.page = PDFView.page;
 });
 
 
@@ -141,7 +142,7 @@ function getCurrentPage(){
 
 		<div class="separator"></div>
 		<input type="number" id="pageNumber"
-			onchange="PDFView.page = this.value;" value="1" size="4" min="1">
+			onchange="PDFView.page = this.value;parent.changedPage();" value="1" size="4" min="1">
 
 		<span>/</span> <span id="numPages">--</span>
 
