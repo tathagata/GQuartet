@@ -20,13 +20,15 @@ import com.google.gdata.data.docs.DocumentListFeed;
 @SuppressWarnings("serial")
 public class UpdateUtilServlet extends HttpServlet {
 
-  static final Logger log = Logger.getLogger(TestGQDataStore.class.getName()); 
+  static final Logger log = Logger.getLogger(UpdateUtilServlet.class.getName()); 
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-     log.warning(req.getParameter("action"));
+     log.warning("Action called for was " + req.getParameter("action"));
      String action = req.getParameter("action");
+
+
 
      StringBuilder data = new StringBuilder();
 
@@ -36,7 +38,15 @@ public class UpdateUtilServlet extends HttpServlet {
     
     if ( "addQuestion".equals(action) )
     {
-       String key  = GQDataStore.AddQuestion((String)req.getParameter("parentKey"), (String)req.getParameter("questionText"), Integer.parseInt(req.getParameter("rating")));
+
+      log.warning("Adding a new question");
+
+
+       Slide slide = GQDataStore.GetSlideBySlideNo((String)req.getParameter("parentKey"), Long.parseLong(req.getParameter("slideNo")));
+
+       log.warning("Slide key for adding new question " + slide.key + ", " + slide.SlideNo ); 
+
+       String key  = GQDataStore.AddQuestion(slide.key, (String)req.getParameter("questionText"), Integer.parseInt(req.getParameter("rating")));
 
        Entity questionEntity = GQDataStore.GetEntityByKey(key);
        Question q = Question.GetQuestion(questionEntity);
@@ -104,10 +114,11 @@ public class UpdateUtilServlet extends HttpServlet {
      }
      catch( Exception e)
      {
-       log.warning("Exception while searching for documents" + e.getMessage());
+      log.warning("Exception during post : " + e.getMessage());
      }
 
     resp.setContentType("text/plain");
+    resp.getWriter().println("Hello there");
     resp.getWriter().println(data.toString());
 
   }

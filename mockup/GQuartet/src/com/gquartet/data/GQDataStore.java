@@ -273,6 +273,27 @@ public class GQDataStore {
       Talk.UpdateActiveSlide(e, slideNo);
       datastore.put(e);
   }
+
+  public static Slide GetSlideBySlideNo(String talkKey, long slideNo )
+  {
+    Slide requiredSlide = null;
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         requiredSlide = Slide.GetSlide(e);
+         break;
+      }
+    }
+
+    return requiredSlide;
+
+
+  }
+
+ 
   
   public static void UpdateLikes(String talkKey, long slideNo, long value)
   {

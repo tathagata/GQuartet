@@ -25,6 +25,11 @@
       </servlet>
 
 
+     <servlet>
+        <servlet-name>UpdateUtilServlet</servlet-name>
+        <servlet-class>com.gquartet.UpdateUtilServlet</servlet-class>
+      </servlet>
+
 
     <servlet>
         <servlet-name>TestGQDataStoreServlet</servlet-name>
@@ -54,10 +59,12 @@
      <servlet-mapping>
         <servlet-name>GetTalkInfo</servlet-name>
         <url-pattern>/getTalkInfo</url-pattern>
+      </servlet-mapping>
+
+     <servlet-mapping>
+        <servlet-name>UpdateUtilServlet</servlet-name>
+        <url-pattern>/updateutil</url-pattern>
      </servlet-mapping>
-
-
-
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
