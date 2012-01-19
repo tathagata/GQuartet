@@ -374,7 +374,7 @@ var PDFView = {
 
   getVisiblePages: function pdfViewGetVisiblePages() {
     var pages = this.pages;
-    var kBottomMargin = 100;
+    var kBottomMargin = 10;
     var visiblePages = [];
 
     var currentHeight = kBottomMargin;
@@ -785,7 +785,6 @@ window.addEventListener('load', function webViewerLoad(evt) {
   }
 
   var scale = ('scale' in params) ? params.scale : kDefaultScale;
-//	if ('resourceId' in params) alert(params.resourceId);
   //PDFView.open(params.file || kDefaultURL, parseFloat(scale));
   PDFView.open("/testpdf?action=getPdf&resourceId="+params.resourceId, parseFloat(scale));
 

@@ -49,7 +49,7 @@
 var talkKey = "<%=talkKey%>";
 console.log(talkKey);
 $(document).ready(function(){
-	getCurrentPage();
+	//getCurrentPage();
 });
 
 

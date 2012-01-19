@@ -19,7 +19,7 @@
 	if ((request.getParameter("talkKey"))!=null){
 		talkKey = request.getParameter("talkKey");
 		talk = GQDataStore.GetTalkByKey(talkKey);
-		resourceId = talk.resourceId;
+    resourceId = talk.resourceId;
 		talkName = talk.talkName;
 		
 	}else{
@@ -30,9 +30,16 @@
 			talkName = request.getParameter("talkName");
 		}
 
+
+    talkName = talkName.substring(0,3);
+
+    Calendar cal = Calendar.getInstance();
+    String timestamp = String.format("%1$tH%1$tM%1$tS", cal);
+
+
 		talkKey =  GQDataStore.AddNewTalk(resourceId
                 , new Date() 
-                , talkName + new Date());
+                , talkName + "_" + timestamp );
 		
 		talk = GQDataStore.GetTalkByKey(talkKey);
 	}
