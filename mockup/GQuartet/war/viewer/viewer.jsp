@@ -76,7 +76,7 @@ function getCurrentPage(){
 			console.log(called);
       PDFView.page = slideNo;
 
-  if(called<2){
+  if(called<5){
     setTimeout('getCurrentPage()',500);
     called=called+1; console.log('called is ' + called);
    }  
