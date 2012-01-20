@@ -41,9 +41,10 @@ if((request.getParameter("slideNo"))!=null){
 %>
 
 <div class="content">
-  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="1500" height="810" id='frameDemo'></iframe>  
-    <div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
+  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="100%" height="500"></iframe>  
+    <div class="pull-left"><a id="fullscreen" class="btn primary">Got it!</a></div>
 
+    <div class="pull-right"><a id="fullscreen" class="btn primary">Oops!</a></div>
 
  	 <script type="text/jvascript">
     		$("#fullscreen").toggle(function(){
@@ -58,16 +59,14 @@ if((request.getParameter("slideNo"))!=null){
   	</script>
 
 
-  <div id="social">
-    <div class="row">
-
-        <div class="span15" >
+    <div class="span12" style="padding-left:100px" >
+      <hr>
           <h4>Ask, Share, Note with <em>others</em></h4>
         </div>
-        <div id="postfeed" style="padding-left:0px;padding-bottom:10px">
+        <div id="postfeed" style="padding-left:100px;padding-bottom:10px">
           <form  id="question">
             <input type="hidden" name="rating" value=0 />
-            <textarea rows="2" name="questionText" class="span15"></textarea>
+            <textarea rows="2" name="questionText" class="span12"></textarea>
             <input id="askquestion" type="submit" class="btn success" value="ASK">
           </form>
         </div>
@@ -112,20 +111,17 @@ if((request.getParameter("slideNo"))!=null){
           	String QPlusSign=" +";
         %>
 
-        <div id="listofquestions">	
-        	<div class="row">
-
-            	<div class="span1" style="padding-top:7px">
+        <div id="listofquestions" style="padding-left:100px">	
+            	<div class="span11" style="padding-top:7px">
               		<img src="images/Question.png" height=20 width=20>
             	</div>
 
-            	<div class="span14" >
+            	<div class="span11" >
               	<h5><%=q.questionText %></h5>
              		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20></a>
               		&nbsp;<%=q.rating%>												
 
             	</div>
-          	<hr>
 
           	<%
           		List<Comment> comments  = q.comments;
@@ -134,39 +130,40 @@ if((request.getParameter("slideNo"))!=null){
 
           	%>
 
-
-          	<div class="" style="padding-left:20px">
+            <div id="commentList">
+            <div class="span11 offset1">
+              <hr>
             		<%=c.commentText%>
             		<br>
             		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20></a>
           		&nbsp;<%=c.rating%>												
         	</div>
-
-        	<hr>
+          </div>
 
         	<%} %>
 
-        	<div>
+          <div class="span11 offset1">
+            <hr>
           		<form id="<%=q.key%>">
             			<input type="hidden" name="parentKey" value="<%=q.key %>"/>
             			<input type="hidden" name="rating" value="0">
-            			<textarea class="span10" type="text" name="commentText"></textarea>
-            			<button class="btn success" onClick='submitComment("<%=q.key%>");return false'></button>
+            			<textarea class="span11" type="text" name="commentText"></textarea>
+            			<button class="btn success" onClick='submitComment("<%=q.key%>");return false'>Comment</button>
           		</form>
         	</div>
       	</div>
     </div><!-- End of one Question Division -->
-	<hr>
+
 	<%}%>
 	<script >
   		function submitComment(questionKey){
    			// alert("called");
       			var $form = $(questionKey);
-          		var  questionText = "asdas";//$form.find('textarea[name="commentText"]').val(),
+          		var  questionText = "Comment";$form.find('textarea[name="commentText"]').val();
             		console.log("Comment text is:"+questionText);
 
             		$.post("/updateutil", {"action":"addComment", "parentKey":questionKey, "commentText":questionText, "rating":0 },function(data){
-                		console.log(data);
+                		$("#commentList").append(data);
            		});
   			return false;
   		}
