@@ -69,7 +69,7 @@ function getCurrentPage(){
 		success: function(data){
       PDFView.page = data;
 
-      setTimeout('getCurrentPage()',200);
+      setTimeout('getCurrentPage()',500);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
 			setTimeout(

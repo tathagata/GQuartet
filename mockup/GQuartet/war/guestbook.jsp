@@ -41,11 +41,12 @@ if((request.getParameter("slideNo"))!=null){
 %>
 
 <div class="content">
-  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="100%" height="200"></iframe>  
-    <div class="pull-left"><a id="like" class="btn primary">Got it!</a></div>
-
-    <div class="pull-right"><a id="dislike" class="btn primary">Oops!</a></div>
-
+  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="100%" height="400"></iframe>  
+  <center>
+    <a id="like" class="btn primary">Got it!</a>
+    <button id="fullscreen" class="btn primary">Fullscreen</button>
+    <a id="dislike" class="btn primary">Oops!</a>
+    </center>
     <script type="text/javascript">
       $("#like").click(function(){
               console.log("like clicked");
@@ -71,10 +72,10 @@ if((request.getParameter("slideNo"))!=null){
 
     		$("#fullscreen").toggle(function(){
       		$("#social").hide();
-      		$("#slide").animate({"height":"+=385"},500);
+      		$("#slide").animate({"height":"+=185"},500);
       		},function(){
       		$("#social").show();
-      		$("#slide").animate({"height":"-=385"},500);
+      		$("#slide").animate({"height":"-=185"},500);
     		});
 
 
