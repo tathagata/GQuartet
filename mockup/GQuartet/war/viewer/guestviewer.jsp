@@ -9,6 +9,19 @@
 <%@page import="java.util.logging.Logger"%>
 <%@page import="java.util.*"%>
 
+<%
+	
+	String talkKey = "";
+	if ((request.getParameter("talkKey"))!=null){
+		talkKey = request.getParameter("talkKey");
+	}else{
+		out.println(talkKey+"is this");
+		response.setHeader("Refresh", "0; URL=../index.jsp");
+    }
+
+    String slideNo = request.getParameter("slideNo");
+
+%>
 
 
 
@@ -33,6 +46,49 @@
 	PDFJS.workerSrc = "pdf.js";
 </script>
 <script type="text/javascript" src="viewer.js"></script>
+<script>
+var talkKey = "<%=talkKey%>";
+console.log(talkKey);
+
+  $(document).ready(function(){
+	getCurrentPage();
+  //window.page = PDFView.page;
+  //console.log("here after setting page "+ PDFView.page);
+});
+
+
+function getCurrentPage(){
+
+	var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
+	$.ajax({
+		type:"GET",
+		url:_url,
+		async:true,
+		cache: false,
+		timeout: 500,
+		success: function(data){
+      PDFView.page = data;
+
+      setTimeout('getCurrentPage()',200);
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown){
+			setTimeout(
+                        'getCurrentPage()', /* Try again after.. */
+                        "15000"); /* milliseconds (15seconds) */
+                },
+	});
+}
+
+
+</script>
+
+
+
+
+
+
+
+
 
 
 </head>
