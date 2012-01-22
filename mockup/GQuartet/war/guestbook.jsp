@@ -24,9 +24,9 @@
 	}
 %>
 
-<div class="content">
+<div class="container">
 	<div class="hero-unit">
-            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" width="1500" height="450" id='frameDemo'></iframe>   
+            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" width="830" height="450" id='frameDemo'></iframe>   
 		<div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
 
         </div>
