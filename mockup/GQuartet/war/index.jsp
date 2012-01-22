@@ -21,23 +21,33 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" ></script>	
   </head>
   <body>
-	<h1>Start a slideshow</h1>
+	<h1> Professor's View</h1>
 	<form action="slideshow.jsp" method="post">
 	<fieldset>
-	<label for="talkName" id="talk_Name" >TalkName</label>  
+	<label for="talkName" id="talk_Name" >Talk Name</label>  
 	    	<input type="text" name="talkName" /> 
 		<input type="submit" />
 	</fieldset>
 	</form>
 	<hr>
-	<h1>View a Talk alone</h1>
+	<h1>View a Talk (Student's View)</h1>
 	<form action="guestbook.jsp" method="post">
 	<fieldset>
-	<label for="talkName" id="talk_Name" >TalkName</label>  
+	<label for="talkName" id="talk_Name" >Talk Name</label>  
 	    	<input type="text" name="talkName" /> 
 		<input type="submit" />
 	</fieldset>
-	</form>
+</form>
+
+<hr>
+  <h1>Search</h1>
+  <fieldset>
+      <form action="/search_result.jsp">
+      <input type=text name=searchText>
+    </form>
+  </fieldset>  
+
+
 
   </body>
 </html>

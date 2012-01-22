@@ -11,6 +11,7 @@ import com.gquartet.data.*;
 
 import java.io.IOException;
 import javax.servlet.http.*;
+import javax.servlet.*;
 import java.util.logging.Logger;
 import java.util.*;
 
@@ -18,7 +19,7 @@ import java.util.*;
 @SuppressWarnings("serial")
 public class Navigator extends HttpServlet {
 
-  static final Logger log = Logger.getLogger(TestGQDataStore.class.getName()); 
+  static final Logger log = Logger.getLogger(Navigator.class.getName()); 
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
@@ -49,6 +50,11 @@ public class Navigator extends HttpServlet {
         GQDataStore.UpdateActiveSlideNo(talkKey, slideNo);
         log.warning("Update complete :  Talk Name=" + talk.talkName + " active slide no = " + slideNo );
 
+
+        ServletContext application = getServletConfig().getServletContext();
+        application.setAttribute("ACTIVE_SLIDE_NO", slideNo);
+        
+        log.warning("latest slide no " + slideNo);
         data.append("SlideNo:"+slideNo);
       
       }

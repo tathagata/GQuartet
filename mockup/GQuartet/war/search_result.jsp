@@ -43,9 +43,12 @@ DocumentListFeed feed = null;
 
     %>
 
+    <h1>Search </h1>
+    <fieldset>
     <form action="/search_result.jsp">
       <input type=text name=searchText value=<%=searchText%>>
     </form>
+    </fieldset>
 
     <% if ( l != null ) {
    for ( SearchResult r : l ) { %>
