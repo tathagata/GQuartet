@@ -19,7 +19,7 @@
 	if ((request.getParameter("talkKey"))!=null){
 		talkKey = request.getParameter("talkKey");
 		talk = GQDataStore.GetTalkByKey(talkKey);
-		resourceId = talk.resourceId;
+    resourceId = talk.resourceId;
 		talkName = talk.talkName;
 		
 	}else{
@@ -30,9 +30,16 @@
 			talkName = request.getParameter("talkName");
 		}
 
+
+    talkName = talkName.substring(0,3);
+
+    Calendar cal = Calendar.getInstance();
+    String timestamp = String.format("%1$tH%1$tM%1$tS", cal);
+
+
 		talkKey =  GQDataStore.AddNewTalk(resourceId
                 , new Date() 
-                , talkName + new Date());
+                , talkName + "_" + timestamp );
 		
 		talk = GQDataStore.GetTalkByKey(talkKey);
 	}
@@ -148,9 +155,9 @@
 			</form>
 			-->
 			<button id="previous" data-theme="a" type="submit">Prev</button>
-			<a href="questions.jsp?talkKey=<%=talkKey%>&slideNo=<%=talk.activeSlideNo%>" data-role="button" data-icon="info">Show Q</a>
-			<button id="next" data-theme="a" type="submit" onlclick="alert('Fuck!');">Next</button>
-		<div id="notification"><label id="SlideNo:">Slide Number</label><%=talk.activeSlideNo%></div>
+			<a href="questions.jsp?talkKey=<%=talkKey%>&slideNo=<%=talk.activeSlideNo%>" rel="external" data-role="button" data-icon="info">Show Q</a>
+			<button id="next" data-theme="a" type="submit" ">Next</button>
+		<div id="notification"><label id="SlideNo:">Slide No:</label><%=talk.activeSlideNo%></div>
 		</div>
 	</div>
 

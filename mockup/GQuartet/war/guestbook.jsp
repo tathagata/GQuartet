@@ -3,230 +3,211 @@
 <%@page import="com.google.appengine.api.datastore.DatastoreServiceFactory"%>
 <%@page import="com.google.appengine.api.datastore.*"%>
 <%@page import="com.gquartet.data.*"%>
+<%@page import="java.util.*"%>
 <%@page import="java.io.IOException"%>
 <%@ include file="header.jsp"%>
+<%@page import="java.util.logging.Logger"%>
+
 <%
-	String talkName = "";
-	String resourceId = "";
-	String talkKey = "";
-	if ((request.getParameter("talkName"))!=null){
-		talkName = request.getParameter("talkName");
-		Talk t = GQDataStore.GetTalkByTalkName(talkName); 
-		if(t!=null){
-			resourceId = t.resourceId;
-			talkKey = t.key;
-		}else{
-			out.println("<center>Talkname:"+talkName+"</center>");
-		}
-		
-	}else{
-		response.setHeader("Refresh", "0; URL=../index.jsp");
-	}
+ Logger log = Logger.getLogger("guestbook.jsp"); 
+
+
+String talkName = "";
+String resourceId = "";
+String talkKey = "";
+long slideNo = 1;
+
+  log.warning("Req Parameter Talk Name" + request.getParameter("talkName"));
+  log.warning("Req Parameter Slide No" + request.getParameter("slideNo"));
+
+if ((request.getParameter("talkName"))!=null){
+  talkName = request.getParameter("talkName");
+  log.warning("Talk Name:" + talkName);
+
+  Talk t = GQDataStore.GetTalkByTalkName(talkName);
+  if(t!=null){
+    resourceId = t.resourceId;
+    talkKey = t.key;
+  }else{
+    out.println("<center>Talkname:"+talkName+"</center>");
+  }
+
+}else{
+	response.setHeader("Refresh", "0; URL=../index.jsp");
+  }
+if((request.getParameter("slideNo"))!=null){
+    slideNo = Long.parseLong(request.getParameter("slideNo"));
+    }
 %>
 
-<div class="container">
-	<div class="hero-unit">
-            <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" width="830" height="450" id='frameDemo'></iframe>   
-		<div class="pull-right"><a id="fullscreen" class="btn primary">Fullscreen</a></div>
+<div class="content">
+  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="100%" height="400"></iframe>  
+  <center>
+    <a id="like" class="btn primary">Got it!</a>
+    <button id="fullscreen" class="btn primary">Fullscreen</button>
+    <a id="dislike" class="btn primary">Oops!</a>
+    </center>
+    <script type="text/javascript">
+      $("#like").click(function(){
+              console.log("like clicked");
+              $.post("/updateutil", {"action":"updateLikes", "talkKey":"<%=talkKey%>", "SlideNo":<%=slideNo%>, "count":1 },function(data){
+                console.log(data+<%=slideNo%>); 
+                $("#like").removeClass("btn primary");
+                $("#like").addClass("btn success disabled");  
+                $("#dislike").addClass("btn danger disabled");  
+            });
 
+        });
+        $("#dislike").click(function(){
+              console.log("dislike clicked");
+              $.post("/updateutil", {"action":"updateDislikes", "talkKey":"<%=talkKey%>", "SlideNo":<%=slideNo%>, "count":1 },function(data){
+                console.log("Reutrned:"+data+":"+<%=slideNo%>);  
+                $("#dislike").removeClass("btn primary");
+                $("#like").addClass("btn success disabled");  
+                $("#dislike").addClass("btn danger disabled");  
+            });
+
+        });
+
+
+    		$("#fullscreen").toggle(function(){
+      		$("#social").hide();
+      		$("#slide").animate({"height":"+=185"},500);
+      		},function(){
+      		$("#social").show();
+      		$("#slide").animate({"height":"-=185"},500);
+    		});
+
+
+  	</script>
+
+
+    <div class="span12" style="padding-left:100px" >
+      <hr>
+          <h4>Ask, Share, Note with <em>others</em></h4>
         </div>
+        <div id="postfeed" style="padding-left:100px;padding-bottom:10px">
+          <form  id="question">
+            <input type="hidden" name="rating" value=0 />
+            <textarea rows="2" name="questionText" class="span12"></textarea>
+            <input id="askquestion" type="submit" class="btn success" value="ASK">
+          </form>
+        </div>
+        <script >
+	var pageNumber;
 
-	<script>
-		$("#fullscreen").toggle(function(){
-			$("#social").hide();
-			$("#slide").animate({"height":"+=385"},500);
-		},function(){
-			$("#social").show();
-			$("#slide").animate({"height":"-=385"},500);
-		});
+	$("#slide").load(function(){
+		pageNumber = $("#slide").contents().find("#pageNumber").val();
+	});
+	function changedPage(){
+		pageNumber =$("#slide").contents().find("#pageNumber").val();
+    console.log("changedPage function was called and page was set to "+pageNumber);
+    //$.post("guestbook.jsp", {"talkName":"<%=talkName%>","slideNo":pageNumber});
+    window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+pageNumber;
+	}	
+
+
+          $("#question").submit(function (event){
+            event.preventDefault();
+            var $form = $(this),
+            questionText = $form.find('textarea[name="questionText"]').val(),
+            url = '/updateutil';
+            console.log("Question text is:"+questionText + "for slide no"+ <%=slideNo%>);
+
+
+            $.post("/updateutil", {"action":"addQuestion", "parentKey":"<%=talkKey%>", "slideNo":<%=slideNo%>, "questionText":questionText, "rating":0 },function(data){
+              console.log("Got back the response: "+data);
+              var questiondata = data.split('|');
+              var imageurl = "<img src='http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png' height=15 width=20>"; 
+              var newquestionchild = "<div class='span11' style='padding-top:7px' ><img src='images/Question.png' height=20 width=20></div><div class='span11'>";
+              newquestionchild += "<h5>"+questiondata[1]+"</h5>"+imageurl+"&nbsp;"+questiondata[2]+"</div>";
+                  
+              console.log(newquestionchild);
+              $("#listofquestions").last().append(newquestionchild);
+              
+              $form.find('textarea[name="questionText"]').val('');
+              
+
+            });
+          });
+        </script>
+
+        <% 
+          log.warning("Slide No before calling data store " + slideNo );
+          //slideNo = 5;
+          Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, slideNo);
+          List<Question> questions  = slide.questions;
+
+          log.warning("No of questions = " + questions.size() );
+	
+        	for ( Question q : questions ){
+          	String QPlusSign=" +";
+        %>
+
+        <div id="listofquestions" style="padding-left:100px">	
+            	<div class="span11" style="padding-top:7px">
+              		<img src="images/Question.png" height=20 width=20>
+            	</div>
+
+            	<div class="span11" >
+              	<h5><%=q.questionText %></h5>
+             		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20></a>
+              		&nbsp;<%=q.rating%>												
+
+            	</div>
+
+          	<%
+          		List<Comment> comments  = q.comments;
+          		for ( Comment c : comments ){
+            			String plussign=" +";
+
+          	%>
+
+            <div id="commentList<%=q.key%>">
+            <div class="span11 offset3">
+              <hr>
+            		<%=c.commentText%>
+            		<br>
+            		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20>
+          		&nbsp;<%=c.rating%>												
+        	  </div>
+          </div>
+
+        	<%} %>
+
+          <div class="span11 offset1">
+            <hr>
+          		<form id="<%=q.key%>">
+            			<input type="hidden" name="parentKey" value="<%=q.key %>"/>
+            			<input type="hidden" name="rating" value="0">
+            			<textarea class="span11" type="text" name="commentText"></textarea>
+            			<button class="btn success" onClick='submitComment("<%=q.key%>");return false'>Comment</button>
+          		</form>
+        	</div>
+      	</div>
+    </div><!-- End of one Question Division -->
+
+	<%}%>
+	<script >
+  		function submitComment(questionKey){
+   			// alert("called");
+      			var $form = $('#'+questionKey);
+          		var  questionText = $form.find('textarea[name="commentText"]').val();
+            		console.log("Comment text is:"+questionText);
+
+                $.post("/updateutil", {"action":"addComment", "parentKey":questionKey, "commentText":questionText, "rating":0 },function(data){
+                  var datasplit = data.split('|');
+                  var imageurl = "<img src='http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png' height=15 width=20>"; 
+                  var newchild = "<div class='span11 offset'><hr>"+datasplit[1]+"<br>"+imageurl+"&nbsp;"+ datasplit[2]+"</div>" 
+                  $("#commentList"+questionKey).last().append(newchild);
+                  $form.find('textarea[name="commentText"]').val('');
+           		});
+  			return false;
+  		}
 	</script>
 
-<script src="js/bootstrap-tabs.js"></script>
-<script>
-
-$("#.tabs").bind("change", function(e){
-	window.activeTab = e.target;
-	//e.relatedTarget
-})
-</script>
-
-<div id="social">
-	<div class="row">
-		<div class="span15">
-			<ul class="tabs" data-tabs="tabs">
-				<li class="active"><a href="#Ask">Ask</a></li>
-				<li><a href="#Feed">Feed</a></li>
-				<li><a href="#Note">Note</a></li>
-			</ul>
-			
-			<div class="pill-content">
-				<div  id="Ask">
-					<div class="row">
-						<div class="span1">
-								<div class="span1 offset1">
-									<img src="images/Question.png" height=35 width=35>
-								</div>
-						</div>
-
-							<div class="span10">
-								<div class="row">
-									<div class="span6">
-										I am totally confused why the Kardashians are so famous? I get the hot part though ...
-									</div>
-										<ul class="media-grid">
-    										<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-    										</li>
-	    									<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh5.googleusercontent.com/-pmaqSWlnG58/AAAAAAAAAAI/AAAAAAAAA2I/3e1PuwiQZhI/s200-c-k/photo.jpg" alt=""></a>
-    										</li>
-    									</ul>
-    							</div>	
-							</div>
-					</div>
-					<hr>
-					<div class="row">
-						<div class="span1">
-								<div class="span1 offset1">
-									<img src="images/Question.png" height=35 width=35>
-								</div>
-						</div>
-
-							<div class="span10">
-								<div class="row">
-									<div class="span6">
-										I am totally confused why the Kardashians are so famous? I get the hot part though ...
-									</div>
-										<ul class="media-grid">
-    										<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-    										</li>
-	    									<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh5.googleusercontent.com/-pmaqSWlnG58/AAAAAAAAAAI/AAAAAAAAA2I/3e1PuwiQZhI/s200-c-k/photo.jpg" alt=""></a>
-    										</li>
-    									</ul>
-    							</div>	
-							</div>
-					</div>
-					<hr>					
-					<div class="row">
-						<div class="span1">
-								<div class="span1 offset1">
-									<img src="images/Question.png" height=35 width=35>
-								</div>
-						</div>
-
-							<div class="span10">
-								<div class="row">
-									<div class="span6">
-										I am totally confused why the Kardashians are so famous? I get the hot part though ...
-									</div>
-										<ul class="media-grid">
-    										<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-    										</li>
-	    									<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh4.googleusercontent.com/-qMLLc9ygtEo/AAAAAAAAAAI/AAAAAAAABGQ/iTb9uKu8Nlc/s48-c-k/photo.jpgbb" alt=""></a>
-    										</li>
-    										<li>
-    											<a href="#"><img class="thumbnail" height=35 width=35 src="https://lh4.googleusercontent.com/-sTmobuvrAJQ/AAAAAAAAAAI/AAAAAAAAE58/1uqkN7lzXf0/s48-c-k/photo.jpg" alt=""></a>
-    										</li>
-    									</ul>
-    							</div>	
-							</div>
-					</div>
-					
-					<hr>					
-					
-					<div class="pagination">
-							<ul>
-								<li class="prev disabled"><a href="#">&larr; Previous</a></li>
-								<li class="active"><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li class="next"><a href="#">Next &rarr;</a></li>
-							</ul>
-					</div>
-				</div>	
-			
-				<div class="active" id="Feed">
-					<script>
-					
-					</script>
-					<div class="page-header" style="padding-left:60px;padding-bottom:10px">
-							<div class="span12" ><h4>Found something interesting? Share it with the class ...</h4></div>
-							<div class="input" id="postfeed" style="padding-bottom:10px">
-								<textarea rows="3" name="textarea2" id="textarea2"
-									class="span14" ></textarea>
-							</div>
-							<div class="" style="padding-left:0px;padding-bottom:10px">
-								<input type="submit" class="btn success" value="Share">
-							</div>
-						</div>	
-						
-							<div class="row">
-								<div class="span2 offset1">
-									<a href="#"><img class="thumbnail" height=50 width=50 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-								</div>
-								<div class="span10">
-									<div>
-									<h3>Mainul Raju</h3>
-									</div>
-									<div>
-									I must say, Head First HTML 5 is an excellent book to start with. Thanks T. Going to watch Sherlock Holmes now. Watched MI4, just awesome. FYI, ticket is only $10 at ICON theater on Roosevelt.
-									</div>
-								</div>
-							</div>	
-							<hr>
-							<div class="row">
-								<div class="span2 offset1">
-									<a href="#"><img class="thumbnail" height=50 width=50 src="https://lh5.googleusercontent.com/-pmaqSWlnG58/AAAAAAAAAAI/AAAAAAAAA2I/3e1PuwiQZhI/s200-c-k/photo.jpg" alt=""></a>
-								</div>
-								<div class="span10">
-								<div>
-									<h3>Tathagata Dasgupta</h3>
-									</div>
-									<div>
-								I saw Sherlock Holmes ... Guy Ritchie awesomeness, but doesn't lacks
-the tension of the first part. MI4? I hear mixed reviews ... Catch
-Girl with the Dragon Tattoo - quite hard hitting. Saw it first day of
-release ... hard hitting, really!</div>
-							</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="span2 offset1">
-									<a href="#"><img class="thumbnail" height=50 width=50 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-								</div>
-								<div class="span10">This is a piece of information thats rather important!</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="span2 offset1">
-									<a href="#"><img class="thumbnail" height=50 width=50 src="https://lh5.googleusercontent.com/-6MAFGmEFPQA/AAAAAAAAAAI/AAAAAAAAAdM/B5ugbriRQOA/s200-c-k/photo.jpg" alt=""></a>
-								</div>
-								<div class="span10">This is a piece of information thats rather important!</div>
-							</div>
-								<label for="textarea"></label>
-								
-
-				</div>
-			
-				<div id="Note" ><iframe class="span16" height=500 src="https://docs.google.com/a/uic.edu/document/d/1aBXqCL8AfFRjvwo-GuWnPrsOwWKfNR5xS93lBIruFGE/edit?hl=en_US"></div>
-			</div>
-		</div>
-		<div class="span5">
-				<h2>Stalkbar</h2>
-				<div></div>
-			</div>
-	</div>
-</div>
 
 
-
-
-	<!--row-->
-
+      <!--row-->
 <%@include file="footer.jsp"%>
+

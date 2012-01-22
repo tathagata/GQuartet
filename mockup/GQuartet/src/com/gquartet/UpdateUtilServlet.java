@@ -18,72 +18,49 @@ import com.google.gdata.data.docs.DocumentListEntry;
 import com.google.gdata.data.docs.DocumentListFeed;
 
 @SuppressWarnings("serial")
-public class TestGQDataStore extends HttpServlet {
+public class UpdateUtilServlet extends HttpServlet {
 
-  static final Logger log = Logger.getLogger(TestGQDataStore.class.getName()); 
+  static final Logger log = Logger.getLogger(UpdateUtilServlet.class.getName()); 
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+     log.warning("Action called for was " + req.getParameter("action"));
+     String action = req.getParameter("action");
+
+
+
+     StringBuilder data = new StringBuilder();
+
+      try
+      {
       
-      log.warning(req.getParameter("action"));
-      String action = req.getParameter("action");
-
-      StringBuilder data = new StringBuilder();
     
-      if ( "addnewtalk".equals(action) )
-       {
+    if ( "addQuestion".equals(action) )
+    {
 
-        data.append(action).append(" performed \n " );
-        data.append ( GQDataStore.AddNewTalk("presentation:0AYyutri7KO7bZDlycjRyY18wZGo5cWd6OHA"
-                , new Date() 
-                , (String)req.getParameter("talkname") ) );
- 
-      }
+      log.warning("Adding a new question");
 
 
-           if ( "addSlide".equals(action) )
-     {
-       log.warning("___Parent key for Slide is___" + req.getParameter("parentKey") );
-       String key  = GQDataStore.AddSlide((String)req.getParameter("parentKey"), Integer.parseInt(req.getParameter("slideNo")));
-       data.append("Slide Key ").append(key).append("\n");
-     }
+       Slide slide = GQDataStore.GetSlideBySlideNo((String)req.getParameter("parentKey"), Long.parseLong(req.getParameter("slideNo")));
 
-     if ( "addQuestion".equals(action) )
-     {
-       String key  = GQDataStore.AddQuestion((String)req.getParameter("parentKey"), (String)req.getParameter("questionText"), Integer.parseInt(req.getParameter("rating")));
-       data.append("Question Key ").append(key).append("\n");
-     }
+       log.warning("Slide key for adding new question " + slide.key + ", " + slide.SlideNo ); 
 
-    if ( "addFeed".equals(action) )
-     {
-       String key  = GQDataStore.AddFeed((String)req.getParameter("parentKey"), (String)req.getParameter("feedText"), Integer.parseInt(req.getParameter("rating")));
-       data.append("Feed Key ").append(key).append("\n");
-     }
+       String key  = GQDataStore.AddQuestion(slide.key, (String)req.getParameter("questionText"), Integer.parseInt(req.getParameter("rating")));
 
+       Entity questionEntity = GQDataStore.GetEntityByKey(key);
+       Question q = Question.GetQuestion(questionEntity);
+       data.append(q.key).append("|").append(q.questionText.replace("|"," ")).append("|").append(q.rating);
+    }
+  
   if ( "addComment".equals(action) )
        {
          String key  = GQDataStore.AddComment((String)req.getParameter("parentKey"), (String)req.getParameter("commentText"), Integer.parseInt(req.getParameter("rating")));
-         data.append("Comment Key ").append(key).append("\n");
+
+         Entity commentEntity = GQDataStore.GetEntityByKey(key);
+         Comment c = Comment.GetComment(commentEntity);
+         data.append(c.key).append("|").append(c.commentText.replace("|"," ")).append("|").append(c.rating);
        }
-
-     if ( "getSlideContent".equals(action) )
-     {
-       Slide s = GQDataStore.GetSlideQuestionsAndComments(req.getParameter("parentKey"), Integer.parseInt(req.getParameter("slideNo")));
-
-       data.append(s.toString());
-
-
-     }
-
-     if ( "updateActiveSlide".equals(action) )
-     {
-        long slideNo = Long.parseLong(req.getParameter("slideNo"));
-        String key = req.getParameter("talkKey");
-        GQDataStore.UpdateActiveSlideNo(key, slideNo);
-
-        data.append("Talk has been updated with active slide");
-     }
 
      if ( "updateQuestionRating".equals(action) )
      {
@@ -113,17 +90,6 @@ public class TestGQDataStore extends HttpServlet {
         data.append("Question has been updated with new rating");
      }
 
-
-     //search based queries
-     if ( "getTalkByTalkName".equals(action) )
-     {
-          Talk t  = GQDataStore.GetTalkByTalkName((String)req.getParameter("talkname"));
-          if ( t != null )
-            data.append(t.talkName).append(" ").append(t.resourceId).append(" ").append(t.dateTime).append("\n"); 
-          else
-            data.append("no talk entity with the name " + (String)req.getParameter("talkname"));
-     }
-
      if ( "updateLikes".equals(action) )
      {
         long count = Long.parseLong(req.getParameter("count"));
@@ -145,47 +111,14 @@ public class TestGQDataStore extends HttpServlet {
      }
 
    
-     try
-      {
-     if ( "searchCourse".equals(action) )
-     {
-       log.warning("Search fot text === "  + req.getParameter("searchText") );
-       List<SearchResult>  l = GQDataStore.SearchText(req.getParameter("searchText"));
-      
-       for ( SearchResult r : l )
-       {
-         data.append(r.talkKey).append(", ").append(r.talkName).append(", ").append(r.slideNo).append(", ").append(r.text).append("\n");
-       }
-
-      Map<String,String> searchParam= new HashMap<String,String>();
-      searchParam.put("q", req.getParameter("searchText"));
-      DocumentList documentList = new DocumentList(
-                  "JavaGDataClientSampleAppV3.0" , "docs.google.com");
-      documentList.login("gquartetbeta@gmail.com", "Google!234");
-      DocumentListFeed feed =  documentList.search(searchParam);
-      
-      StringBuffer s = new StringBuffer();
-      if ( feed !=  null )
-      {
-          s.append("List of Documents <br>");
-          
-          for ( DocumentListEntry entry: feed.getEntries())
-          {
-              s.append(printDocumentEntry(entry));
-              s.append("<br>");
-          }
-
-          data.append(s.toString());
-     }
-     }
      }
      catch( Exception e)
      {
-       log.warning("Exception while searching for documents" + e.getMessage());
+      log.warning("Exception during post : " + e.getMessage());
      }
 
     resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
+    resp.getWriter().println("Hello there");
     resp.getWriter().println(data.toString());
 
   }

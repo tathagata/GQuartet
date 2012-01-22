@@ -2,7 +2,7 @@
 /* vim: set shiftwidth=4 tabstop=8 autoindent cindent expandtab: */
 
 body {
-  background-color: #929292;
+  background-color: #000;
   font-family: 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif;
   margin: 0px;
   padding: 0px;
@@ -284,7 +284,7 @@ canvas {
 
 #viewer {
   margin: 44px 0px 0px;
-  padding: 8px 0px;
+  padding: 8px 0px 8px;
 }
 
 #sidebarView canvas:hover {

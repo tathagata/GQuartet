@@ -85,6 +85,30 @@
     <input type="submit" value="Submit">
   </form>
 
+  <form action="/testdb?action=updateLikes" method="post">
+    <p>Update Likes</p>
+    Talk Key
+    <input type="text" name="talkKey"/>
+    Slide No
+    <input type="text" name="SlideNo"/>
+    Like Count 
+    <input type="text" name="count"/>
+    <input type="submit" value="Submit">
+  </form>
+
+  <form action="/testdb?action=updateDislikes" method="post">
+    <p>Update DisLikes</p>
+    Talk Key
+    <input type="text" name="talkKey"/>
+    Slide No
+    <input type="text" name="SlideNo"/>
+    DisLike Count 
+    <input type="text" name="count"/>
+    <input type="submit" value="Submit">
+  </form>
+
+
+
   <form action="/testdb?action=updateCommentRating" method="post">
     <p>Update CommentRating</p>
     Comment Key

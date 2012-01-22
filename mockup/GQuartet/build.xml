@@ -71,12 +71,9 @@
     </appcfg>
   </target>
 
-
   <target name="run_app"
-          depends="compile"
-          description="Starts the app engine after compiling">
-          <exec executable="./run_app.sh"/>
-  </target>
-
-
+              depends="compile"
+                        description="Starts the app engine after compiling">
+                                  <exec executable="./run_app.sh"/>
+                                    </target>
 </project>

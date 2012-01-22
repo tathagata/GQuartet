@@ -36,6 +36,11 @@ public class GQDataStore {
      Entity talk = Talk.GetEntity(resourceId, talkDate, talkName, 1, new Date());
      datastore.put(talk);
 
+     for ( int i=1; i <= 25 ; i++ )
+     {
+       AddSlide ( KeyFactory.keyToString(talk.getKey()), i);
+     }
+
      return KeyFactory.keyToString(talk.getKey());
 
   }
@@ -111,7 +116,6 @@ public class GQDataStore {
 	log.warning(talkName +"will be compared now");
      for (Entity entity : datastore.prepare(query).asIterable()) 
      {
-	System.out.println(entity.getProperty("Name")+" "+talkName);
        if ( talkName.equals(entity.getProperty("Name") ))
            {
              log.warning("Print for each entry with same name....");
@@ -273,6 +277,74 @@ public class GQDataStore {
       Talk.UpdateActiveSlide(e, slideNo);
       datastore.put(e);
   }
+
+  public static Slide GetSlideBySlideNo(String talkKey, long slideNo )
+  {
+    Slide requiredSlide = null;
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         requiredSlide = Slide.GetSlide(e);
+         break;
+      }
+    }
+
+    return requiredSlide;
+
+
+  }
+
+ 
+  
+  public static void UpdateLikes(String talkKey, long slideNo, long value)
+  {
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         Slide requiredSlide = Slide.GetSlide(e);
+         if ( requiredSlide.likes + value > 0 )
+           e.setProperty("Likes", requiredSlide.likes + value );
+         else 
+           e.setProperty("Likes",0);
+         
+         datastore.put(e);
+         break;
+      }
+    }
+  }
+
+  public static void UpdateDislikes(String talkKey, long slideNo, long value)
+  {
+    List<Entity> slides = GetChildrenByKind(talkKey, "Slide");
+    for ( Entity e: slides )
+    {
+      if ( (Long)e.getProperty("SlideNo") == slideNo )
+      {
+         String slideKey = KeyFactory.keyToString(e.getKey());
+         Slide requiredSlide = Slide.GetSlide(e);
+         if ( requiredSlide.dislikes + value > 0 )
+           e.setProperty("Dislikes", requiredSlide.dislikes + value );
+         else 
+           e.setProperty("Dislikes",0);
+         
+         datastore.put(e);
+         break;
+
+      }
+    }
+  }
+
+
+
+
+
+
 
   public static void UpdateQuestionRating(String questionKey, long rating)
   {

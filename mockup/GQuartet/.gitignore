@@ -7,3 +7,6 @@
 *appengine-generated*
 *classes*
 war/WEB-INF/appengine-generated/datastore-indexes-auto.xml
+build.xml
+push_to_app.sh
+run_app.sh

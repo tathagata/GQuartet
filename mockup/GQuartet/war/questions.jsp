@@ -15,48 +15,58 @@
 
 <%
      String talkKey = request.getParameter("talkKey") ;
-     Long slideNo = Long.parseLong(request.getParameter("slideNo"));
-     Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, slideNo);
+     //Long slideNo = Long.parseLong(request.getParameter("slideNo"));
+     
+     Talk talk = GQDataStore.GetTalkByKey(talkKey);
+     Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, talk.activeSlideNo);
 
      if ( slide != null )
      {
      %>
 <html>
-  <head>
-    Questions on  <%= slideNo %> ( Total Questions : ) <%=slide.questions.size()%>
-  </head>
 
-  <table>
-    <% for ( Question q : slide.questions ) { %>
-  <tr>
-    <td>
-      <%= q.questionText %>
-    </td>
-    </tr>
-    <% } %>
-  </table>
-  <a href="navigator.jsp?talkKey=<%=talkKey%>">GO back</a>
-  </html>
+  <head>
+       
+    <title>Questions</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+  </head>
+  
+<body>
+  
+   <div class="content-primary">
+		<ul data-role="listview" data-theme="c">  
+
+    <% 
+	String talkName = "";
+    for ( Question q : slide.questions ) { %>
+		<li>    
+    		<%= q.questionText %>
+		</li>
+  <% } %>
+  
+  </ul>
+  </div>
+  <div class="center-wrapper">
+    <img src='https://chart.googleapis.com/chart?cht=p3&chs=250x100&chd=t:<%=slide.likes%>,<%=slide.dislikes%>&chl=like|dislike&chof=png'>
+  
+  <a href="/navigator.jsp?talkKey=<%=talkKey%>" data-role="button" rel="external">GO back</a>
+
+  </div>
     <%
     }
     else
     {
     %>
-      <html>
-        <head>
-          Error retrieving questions for requested slide.
-        </head>
-        <body>
-            <p>
-          <i>
-            Invalid data passed, User Query String should be : <br><br> talkKey=&lt;talkKey&gt;&slideNo=&lt;slideNo&gt;
-          </i>
-        </body>
-  <a href="navigator.jsp?talkKey=<%=talkKey%>">GO back</a>
-      </html>
-
-    <% } %>
-
+         
+        <h5>  Error retrieving questions for requested slide.</h5>
+       		<a href="/navigator.jsp?talkKey=<%=talkKey%>" rel="external">GO back</a>
+     <% } %>
+ </body>
+</html>
    
 
 

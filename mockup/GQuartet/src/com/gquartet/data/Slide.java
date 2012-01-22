@@ -14,16 +14,24 @@ public class Slide
   public String key;
   public long SlideNo;
 
+  public long likes=0;
+  public long dislikes=0; 
+
   //attributes that are populated in some instances
   public List<Question> questions = new ArrayList<Question>();
   public List<Feed> feeds = new ArrayList<Feed>();
-
 
   public static Slide GetSlide(Entity entity)
   {
       Slide q = new Slide();
       q.key = KeyFactory.keyToString(entity.getKey());
       q.SlideNo = (Long)entity.getProperty("SlideNo");
+
+      if ( entity.getProperty("Likes") != null )
+        q.likes = (Long)entity.getProperty("Likes");
+
+      if ( entity.getProperty("Dislikes") != null )
+        q.dislikes = (Long)entity.getProperty("Dislikes");
 
       return q;
   }
@@ -41,8 +49,9 @@ public class Slide
     StringBuilder b = new StringBuilder();
     Key k = KeyFactory.stringToKey(key);
     b.append( "Slide (").append(k.getId()).append(") : ").append( "SlideNo=" ).append(SlideNo);
+    b.append( "Likes = " ).append(likes).append( " , Dislikes = " ).append(dislikes);
     b.append(" ParentInfo = ").append(k.getParent().toString());
-
+    
     b.append("\n");
     for ( Question q : questions )
     {
