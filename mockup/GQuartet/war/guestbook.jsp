@@ -38,15 +38,66 @@ if ((request.getParameter("talkName"))!=null){
 if((request.getParameter("slideNo"))!=null){
     slideNo = Long.parseLong(request.getParameter("slideNo"));
     }
+
+//resourceId = "10";
+//talkKey = "aghndXJ1a3dlbHIKCxIEVGFsaxgBDA";
 %>
 
-<div class="content">
-  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width="100%" height="400"></iframe>  
-  <center>
-    <a id="like" class="btn primary">Got it!</a>
-    <button id="fullscreen" class="btn primary">Fullscreen</button>
-    <a id="dislike" class="btn primary">Oops!</a>
-    </center>
+<head>
+    <title>Questions and Comments</title> 
+    
+    
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  
+  <script>
+  
+  $(document).ready(function() {
+    $("#listofquestions").accordion();
+    $("#listofquestions" ).accordion({ autoHeight: false });
+    $("#listofquestions" ).accordion({ collapsible: true });
+    $("#listofquestions" ).accordion({ autoHeight: false });
+     });
+  
+  </script>
+  
+ </head>
+ <div class="topbar" data-dropdown="dropdown">
+		<div class="topbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="index.jsp">Quartet</a>
+				<ul class="nav">
+					<li><a href="docs.jsp" target="_blank">Docs</a></li>
+					<li><a href="contacts.jsp" target="_blank">Contact</a></li>
+				</ul>
+				<%@include file="search.jsp"%>
+			</div>
+		</div>
+	</div>
+
+ 
+
+
+<!--################### START OF BOTH LEFT AND RIGHT PART ############# -->
+<div id="allcontent">
+
+
+<!--################### START OF LEFT PART ############# -->
+
+<div id="showslides" style="width:65%; height:880px; background-color:#ffffff; position:relative; 
+            margin-top:5px; margin-left:5px; float:left; padding-left:5px; border:0px">
+	
+  <iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" 
+  frameborder="5" width=100% height=100%>
+  </iframe>
+     
+  </div> 
+  
+ <!--################### END OF LEFT PART ############# -->
+  
+  
+  <!--################### START OF SCRIPT ############# -->
     <script type="text/javascript">
       $("#like").click(function(){
               console.log("like clicked");
@@ -77,23 +128,40 @@ if((request.getParameter("slideNo"))!=null){
       		$("#social").show();
       		$("#slide").animate({"height":"-=185"},500);
     		});
+    		
+    		
+    		
 
 
   	</script>
 
+<!--################### END OF SCRIPT ############# -->
 
-    <div class="span12" style="padding-left:100px" >
-      <hr>
+
+<!-- ############## START OF RIGHT PART ###################-->
+
+<div id="QuestionsComments" style= "height:880px; width:34%; background-color:#ffffff; position:relative; margin-top:5px; 
+             float:right;overflow:scroll;border: 3px solid #ddd;">
+
+    	   	
+                
+         <div id="questbox">
           <h4>Ask, Share, Note with <em>others</em></h4>
         </div>
-        <div id="postfeed" style="padding-left:100px;padding-bottom:10px">
+        <div id="postfeed" style="padding-bottom:10px;padding-top:10px">
           <form  id="question">
             <input type="hidden" name="rating" value=0 />
-            <textarea rows="2" name="questionText" class="span12"></textarea>
+            <textarea rows="3" name="questionText" style="width:95%"></textarea>
             <input id="askquestion" type="submit" class="btn success" value="ASK">
           </form>
         </div>
-        <script >
+        
+                    
+        
+        
+ <!-- ###################  START OF SCRIPT ###################-->
+    <script >
+        
 	var pageNumber;
 
 	$("#slide").load(function(){
@@ -130,9 +198,10 @@ if((request.getParameter("slideNo"))!=null){
 
             });
           });
-        </script>
+   </script>
+   
+   <!-- ###################  END OF SCRIPT ###################-->
 
-        <div id="listofquestions" style="padding-left:100px">	
         <% 
           log.warning("Slide No before calling data store " + slideNo );
           //slideNo = 5;
@@ -140,54 +209,78 @@ if((request.getParameter("slideNo"))!=null){
           List<Question> questions  = slide.questions;
 
           log.warning("No of questions = " + questions.size() );
+          
+        %>      
+
 	
-        	for ( Question q : questions ){
+<!-- START OD JQUERY ACCORDION DIVISION -->
+
+       <div id="listofquestions">	
+				            
+		<%
+        for ( Question q : questions ){
           	String QPlusSign=" +";
         %>
+        
+        <div id=qbody style="font-size: 135%;">
+          <a href="#"><%=q.questionText %></a>
+        </div>
+           
+<!-- ############### EXPANSION ####################### -->
+ <!-- THIS PORTION GOES UNDER EACH QUESTION WHEN IT ISEXPANDED -->
+           <div>
+           
+          		<%
+	          		List<Comment> comments  = q.comments;
+          			for ( Comment c : comments ){
+            				String plussign=" +";
+	       		%>
 
-            	<div class="span11" style="padding-top:7px">
-              		<img src="images/Question.png" height=20 width=20>
-            	</div>
-
-            	<div class="span11" >
-              	<h5><%=q.questionText %></h5>
-             		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20></a>
-              		&nbsp;<%=q.rating%>												
-
-            	</div>
-
-          	<%
-          		List<Comment> comments  = q.comments;
-          		for ( Comment c : comments ){
-            			String plussign=" +";
-
-          	%>
-
-            <div id="commentList<%=q.key%>">
-            <div class="span11 offset3">
-              <hr>
-            		<%=c.commentText%>
-            		<br>
-            		<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=15 width=20>
-          		&nbsp;<%=c.rating%>												
-        	  </div>
-          </div>
-
-        	<%} %>
-
-          <div class="span11 offset1">
-            <hr>
+				
+          		
+          		<div id="commentList<%=q.key%>"  style="padding-left:25px; font-size: 115%;">
+            			<div >
+              			<%=c.commentText%>
+              			<br>
+            			<img src="http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png" height=20 width=25>
+          				&nbsp;<%=c.rating%>
+          				<hr>												
+        	  		</div>
+         	 	</div>
+          		
+          		
+           
+	        	<%} %>
+	        	
+	        	<!-- ########COMMENT TEXT BOX ###########-->
+	        	<div style = "padding-left:25px;">
+           		 
           		<form id="<%=q.key%>">
             			<input type="hidden" name="parentKey" value="<%=q.key %>"/>
             			<input type="hidden" name="rating" value="0">
-            			<textarea class="span11" type="text" name="commentText"></textarea>
+            			<textarea type="text" rows="3" name="commentText" style="width:95%;"></textarea>
             			<button class="btn success" onClick='submitComment("<%=q.key%>");return false'>Comment</button>
           		</form>
+        		</div>
+        		<!-- ########END OF COMMENT TEXT BOX ###########-->
+        	
         	</div>
-      	</div>
-    </div><!-- End of one Question Division -->
+<!-- ####################END OF EXPANSION ########################### -->
+    
+    	<%}%>
+	</div>
+<!-- ###########END OF ALL QUESTIONS, END OF DIV ID = listofquestions ########## -->
+	
+	
+	
+</div>  
+<!--########## END OF RIGHT AREA, END OF DIV ID = QuestionsComments############-->
+    	
 
-	<%}%>
+
+
+
+<!--########## SCRIPT FOR SUBMITTING COMMENT ############-->
 	<script >
   		function submitComment(questionKey){
    			// alert("called");
@@ -205,9 +298,76 @@ if((request.getParameter("slideNo"))!=null){
   			return false;
   		}
 	</script>
+<!--########## END OF SCRIPT ############-->
 
 
 
+	
+	
+<!--####### START OF FEEDBACK BUTTON DIVISION######### -->	
+<center> 	
+<div id="feedback" style="padding-left:10px;">
+    <a id="like" class="btn primary">Got it!</a>
+    <!-- button id="fullscreen" class="btn primary">Fullscreen</button> -->
+    <a id="dislike" class="btn primary">   Oops!   </a>
+    
+	<button id=showhidequestions class="btn primary" style="float:right;">>></button>
+
+</div>
+</center>
+<!--####### END OF FEEDBACK BUTTON DIVISION ######### -->
+
+
+  
+</div>
+<!--####### END OF BOTH LEFT AND RIGHT SECTION, DIVISION ID = allcontents ######### -->
+
+
+
+
+<script>
+$("#showhidequestions").toggle(function(){
+    	
+				$("#like").hide();
+				$("#dislike").hide();
+				$("#footer").hide();
+				$("#showhidequestions").hide();
+				
+				$("#QuestionsComments").hide();
+				
+				
+				
+          		$('#showslides').animate({"width": "100%"},800, function(){
+          			$("#like").show();
+    				$("#dislike").show();
+    				$("#footer").show();
+    				$("#showhidequestions").html('<<');
+    				$("#showhidequestions").show();
+          			
+          		});
+          		
+          		
+              		},function(){
+              	$("#like").hide();
+        		$("#dislike").hide();
+        		$("#footer").hide();
+        		$("#showhidequestions").hide();
+          		$('#showslides').animate({"width": "65%"}, 800, function(){
+          		
+          			$("#QuestionsComments").show();
+              	
+          			$("#like").show();
+    				$("#dislike").show();
+    				$("#footer").show();
+    				$("#showhidequestions").html('>>');
+    				$("#showhidequestions").show();
+          		});
+          		
+          		});
+                		
+
+</script>
       <!--row-->
+<div id="footer">
 <%@include file="footer.jsp"%>
-
+</div>

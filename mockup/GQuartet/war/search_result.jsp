@@ -42,6 +42,7 @@ DocumentListFeed feed = null;
   String searchText = "";
   if (request.getParameter("searchText")!=null){
   //Search for text in questions and comments
+  searchText = request.getParameter("searchText");
    l = GQDataStore.SearchText(request.getParameter("searchText"));
 
   //Search for text in slides associated with presentations
@@ -99,10 +100,31 @@ DocumentListFeed feed = null;
 </div>
 </div>
 
+<div class="hero-unit">
+<div class="module module-header">
+<div class="flex-module">
+<div class="row">
 
-
+<h2>Google Book search</h2>
+<div id="content"></div>
+    <script>
+      function handleResponse(response) {
+      for (var i = 0; i < response.items.length; i++) {
+        var item = response.items[i];
+        // in production code, item.text should have the HTML entities escaped.
+        document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
+         	}
+        }
+      </script>
+      <script src="https://www.googleapis.com/books/v1/volumes?q=<%=searchText%>&callback=handleResponse"></script>
 
 </div>
+</div>
+</div>
+</div>
+</div>
+
+
 <%@ include file="footer.jsp"%>
 
    
