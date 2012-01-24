@@ -132,6 +132,7 @@ if((request.getParameter("slideNo"))!=null){
           });
         </script>
 
+        <div id="listofquestions" style="padding-left:100px">	
         <% 
           log.warning("Slide No before calling data store " + slideNo );
           //slideNo = 5;
@@ -144,7 +145,6 @@ if((request.getParameter("slideNo"))!=null){
           	String QPlusSign=" +";
         %>
 
-        <div id="listofquestions" style="padding-left:100px">	
             	<div class="span11" style="padding-top:7px">
               		<img src="images/Question.png" height=20 width=20>
             	</div>

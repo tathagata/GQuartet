@@ -27,7 +27,7 @@
 
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-
+<script src="js/modernizr.custom.34982.js"></script>
   </head>
 
   <body>
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 	</div>
--->
-<!--	<div class="container-fluid"> -->
+	<div class="container"> 
 
+-->
     
