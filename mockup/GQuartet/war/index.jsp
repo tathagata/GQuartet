@@ -9,45 +9,57 @@
 <%@page import="java.util.logging.Logger"%>
 <%@page import="java.util.*"%>
 
+<%@ include file="header.jsp"%>
+<style type="text/css">
+body{
+background-image: url('http://www.uicargus.com/wp-content/uploads/2010/02/dh-exterior-web.jpg');
+background-size:100%;
+padding:200px 0 200px;
+}
+</style>
+<div class="topbar" data-dropdown="dropdown">
+		<div class="topbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="index.jsp">Quartet</a>
+				<ul class="nav">
+					<li><a href="docs.jsp" target="_blank">Docs</a></li>
+					<li><a href="contacts.jsp" target="_blank">Contact</a></li>
+				</ul>
+				<%@include file="search.jsp"%>
+			</div>
+		</div>
+	</div>
 
 
-
-<!DOCTYPE HTML> 
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
-	<title>GQuartet</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" ></script>	
-  </head>
-  <body>
-	<h1> Professor's View</h1>
+<div class="container">
+<div class="hero-unit" id="Professor" >
+	<h1> Start a Talk</h1>
 	<form action="slideshow.jsp" method="post">
+	<div class="clearfix">
 	<fieldset>
 	<label for="talkName" id="talk_Name" >Talk Name</label>  
+	<div class="input">
 	    	<input type="text" name="talkName" /> 
-		<input type="submit" />
+		<input class="btn primary" type="submit" value='Start!' />
+	</div>
 	</fieldset>
+	</div>
 	</form>
-	<hr>
-	<h1>View a Talk (Student's View)</h1>
+	</div>
+<div class="hero-unit" id="Student">
+	<h1>View a Talk</h1>
 	<form action="guestbook.jsp" method="post">
+	<div class="clearfix">
 	<fieldset>
 	<label for="talkName" id="talk_Name" >Talk Name</label>  
+	<div class="input">
 	    	<input type="text" name="talkName" /> 
-		<input type="submit" />
+		<input class="btn primary" type="submit" value='Join!'/>
+	</div>
 	</fieldset>
-</form>
+	</div>
+	</form>
+	</div>
 
-<hr>
-  <h1>Search</h1>
-  <fieldset>
-      <form action="/search_result.jsp">
-      <input type=text name=searchText>
-    </form>
-  </fieldset>  
-
-
-
-  </body>
-</html>
+</div>
+<%@ include file="footer.jsp"%>

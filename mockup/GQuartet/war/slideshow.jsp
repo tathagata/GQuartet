@@ -9,12 +9,14 @@
 	String talkName = "";
 	String resourceId = "";
 	String talkKey = "";
+	long slideNo=0;
 	if ((request.getParameter("talkName"))!=null){
 		talkName = request.getParameter("talkName");
 		Talk t = GQDataStore.GetTalkByTalkName(talkName); 
 		if(t!=null){
 			resourceId = t.resourceId;
 			talkKey = t.key;
+			slideNo = t.activeSlideNo;
 		}else{
 			out.println("<center>Talkname:"+talkName+"</center>");
 		}
@@ -23,9 +25,15 @@
 		response.setHeader("Refresh", "0; URL=../index.jsp");
 	}
 %>
+<script	type="text/javascript" src="js/bootstrap-modal.js">
+</script>
+
+
+<div class="content">
+            <iframe id="slide" src="viewer/guestviewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" style="border: 0; width: 100%; height: 810px;"></iframe>   
 <script type="text/javascript">
 $("#slide").load(function(){
-	$("#slide").contents().find("#controls").hide();
+	//$("#slide").contents().find("#controls").hide();
 });
 
 </script>
@@ -33,5 +41,24 @@ $("#slide").load(function(){
             <iframe id="slide" src="viewer/guestviewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" style="border: 0; width: 100%; height: 810px;"></iframe>   
 
 	<!--row-->
+<div class="modal hide fade" id="modal-from-dom" style="display: block;width:700px;">
+            <div class="modal-header">
+              <a class="close" href="#">×</a>
+              <h3>Questions</h3>
+            </div>
+            <div class="modal-body">
+            <iframe src="questions.jsp?talkKey=<%=talkKey%>&slideNo=<%=slideNo%>" width='630' frameborder=0 ></iframe>
+		</div>
+            <div class="modal-footer">
+              <a class="btn primary" href="#">Primary</a>
+              <a class="btn secondary" href="#">Secondary</a>
+            </div>
+          </div>
+<button class="btn danger" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-from-dom">Questions</button>
+</div>
+<div class="modal hide fade" id="modal-for-drawing" style="display:block; width:500px; height:700px;">
+	<iframe src="scratch/lineTo.html" height=100% width=100% frameborder=0></iframe>
+</div>
 
+<button id="scratch" class="btn danger" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-for-drawing">Scratchpad</button>
 <%@include file="footer.jsp"%>
