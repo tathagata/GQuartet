@@ -27,6 +27,7 @@ public class Navigator extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+      log.warning("Inside doPost of navigator");
       ServletContext application = getServletConfig().getServletContext();
       
       log.warning(req.getParameter("action"));
