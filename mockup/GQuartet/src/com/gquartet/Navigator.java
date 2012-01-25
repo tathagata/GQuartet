@@ -23,11 +23,11 @@ public class Navigator extends HttpServlet {
 
   static final Logger log = Logger.getLogger(Navigator.class.getName()); 
 
-  ServletContext application = getServletConfig().getServletContext();
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+      ServletContext application = getServletConfig().getServletContext();
       
       log.warning(req.getParameter("action"));
       String action = req.getParameter("action");
@@ -83,8 +83,9 @@ public class Navigator extends HttpServlet {
 			throws IOException {
    
     
-    resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
+    //resp.setContentType("text/plain");
+      doPost(req, resp);
+		//resp.getWriter().println("Hello, world");
 
 	}
 }
