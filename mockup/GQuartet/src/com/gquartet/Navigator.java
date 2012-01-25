@@ -56,7 +56,7 @@ public class Navigator extends HttpServlet {
         log.warning("Update complete :  Talk Name=" + talk.talkName + " active slide no = " + slideNo );
 
 
-        //application.setAttribute("ACTIVE_SLIDE_NO", slideNo);
+        application.setAttribute("ACTIVE_SLIDE_NO", slideNo);
         log.warning("latest slide no " + slideNo);
         data.append("SlideNo:"+slideNo);
 
