@@ -33,7 +33,7 @@
             <iframe id="slide" src="viewer/guestviewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" style="border: 0; width: 100%; height: 810px;"></iframe>   
 <script type="text/javascript">
 $("#slide").load(function(){
-	$("#slide").contents().find("#controls").hide();
+	//$("#slide").contents().find("#controls").hide();
 });
 
 </script>
@@ -54,5 +54,9 @@ $("#slide").load(function(){
           </div>
 <button class="btn danger" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-from-dom">Questions</button>
 </div>
+<div class="modal hide fade" id="modal-for-drawing" style="display:block; width:500px; height:700px;">
+	<iframe src="scratch/lineTo.html" height=100% width=100% frameborder=0></iframe>
+</div>
 
+<button id="scratch" class="btn danger" data-keyboard="true" data-backdrop="true" data-controls-modal="modal-for-drawing">Scratchpad</button>
 <%@include file="footer.jsp"%>

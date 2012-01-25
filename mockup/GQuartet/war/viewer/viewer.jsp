@@ -78,7 +78,7 @@ function getCurrentPage(){
    }else{
 	if($("#page"+PDFView.page).length){
 	console.log("Fine");
-			sketcher = new Sketcher("page"+parseInt(PDFView.page));
+		sketcher = new Sketcher("page"+parseInt(PDFView.page));
 	}
 
 	} 
