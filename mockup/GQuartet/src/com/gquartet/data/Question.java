@@ -46,6 +46,24 @@ public class Question
     e.setProperty("Rating", rating);
   }
 
+  public String toJSON()
+  {
+    StringBuilder b = new StringBuilder();
+    b.append("{");
+    b.append(toKeyValue("key",key));
+    b.append(toKeyValue("questionText", questionText));
+    b.append(toKeyValue("rating", String.valueOf(rating)));
+    b.append("}");
+
+    return b.toString();
+
+  }
+
+  public String toKeyValue(String key, String value)
+  {
+    return String.format("\"%s\":\"%s\"",key,value);
+  }
+
   public String toString()
   {
     StringBuilder b = new StringBuilder();

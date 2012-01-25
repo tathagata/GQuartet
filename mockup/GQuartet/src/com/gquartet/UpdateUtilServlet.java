@@ -11,6 +11,7 @@ import com.google.gdata.data.Link;
 
 import java.io.IOException;
 import javax.servlet.http.*;
+import javax.servlet.*;
 import java.util.logging.Logger;
 import java.util.*;
 import com.google.gdata.data.docs.DocumentEntry;
@@ -27,6 +28,7 @@ public class UpdateUtilServlet extends HttpServlet {
 
      log.warning("Action called for was " + req.getParameter("action"));
      String action = req.getParameter("action");
+     ServletContext application = getServletConfig().getServletContext();
 
 
 

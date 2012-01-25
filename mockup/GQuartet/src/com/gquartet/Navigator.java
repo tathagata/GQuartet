@@ -27,7 +27,8 @@ public class Navigator extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-  ServletContext application = getServletConfig().getServletContext();
+      log.warning("Inside doPost of navigator");
+      ServletContext application = getServletConfig().getServletContext();
       
       log.warning(req.getParameter("action"));
       String action = req.getParameter("action");
@@ -83,8 +84,9 @@ public class Navigator extends HttpServlet {
 			throws IOException {
    
     
-    resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
+         //resp.setContentType("text/plain");
+		doPost(req,resp);
+		//resp.getWriter().println("Hello, world");
 
 	}
 }

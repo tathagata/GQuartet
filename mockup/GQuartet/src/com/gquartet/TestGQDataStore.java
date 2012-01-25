@@ -185,7 +185,7 @@ public class TestGQDataStore extends HttpServlet {
      }
 
     resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
+		
     resp.getWriter().println(data.toString());
 
   }
