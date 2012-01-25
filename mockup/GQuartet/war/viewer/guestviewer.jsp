@@ -145,6 +145,7 @@ function getCurrentPage(){
 			<img src="images/go-down.svg" align="top" height="16"> Next
 		</button>
 
+
 		<div class="separator"></div>
 		<input type="number" id="pageNumber"
 			onchange="PDFView.page = this.value;" value="1" size="4" min="1">

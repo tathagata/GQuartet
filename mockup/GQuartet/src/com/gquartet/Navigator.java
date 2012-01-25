@@ -8,7 +8,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.*;
 import com.gquartet.data.*;
 
-
+import com.google.appengine.api.channel.*;
 import java.io.IOException;
 import javax.servlet.http.*;
 import javax.servlet.*;
@@ -16,14 +16,18 @@ import java.util.logging.Logger;
 import java.util.*;
 
 
+
+
 @SuppressWarnings("serial")
 public class Navigator extends HttpServlet {
 
   static final Logger log = Logger.getLogger(Navigator.class.getName()); 
 
+
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+  ServletContext application = getServletConfig().getServletContext();
       
       log.warning(req.getParameter("action"));
       String action = req.getParameter("action");
@@ -51,12 +55,22 @@ public class Navigator extends HttpServlet {
         log.warning("Update complete :  Talk Name=" + talk.talkName + " active slide no = " + slideNo );
 
 
-        ServletContext application = getServletConfig().getServletContext();
         application.setAttribute("ACTIVE_SLIDE_NO", slideNo);
-        
         log.warning("latest slide no " + slideNo);
         data.append("SlideNo:"+slideNo);
-      
+
+        ChannelHelper.broadcastSlideChange(application, slideNo);
+
+      }
+      else if ( "getToken".equals(action) )
+      {
+        
+        String clientName = req.getParameter("clientName");
+        String talkName = req.getParameter("talkName");
+
+        // Create Channel and client.
+        String token = ChannelHelper.addChannel(application, ChannelHelper.getChannelKey(clientName, talkName));
+        data.append("Token:"+token);
       }
 
     resp.setContentType("text/plain");

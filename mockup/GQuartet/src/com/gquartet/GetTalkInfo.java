@@ -56,6 +56,8 @@ public class GetTalkInfo extends HttpServlet {
         //application.setAttribute("ACTIVE_SLIDE_NO", 1);
 
         slideNo = (Long)application.getAttribute("ACTIVE_SLIDE_NO");
+        if ( slideNo == null )
+		slideNo=new Long(1);
         //slideNo++;
 
         log.warning("latest slide no " + slideNo);

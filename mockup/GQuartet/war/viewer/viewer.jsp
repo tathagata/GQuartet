@@ -144,6 +144,10 @@ function getCurrentPage(){
 		</button>
 
 		<div class="separator"></div>
+		<button class="btn primary" id="sync" onclick="parent.paused=true">Sync</button>
+		<button class="btn primary" id="async" onclick="parent.paused=false">Async</button>
+
+		<div class="separator"></div>
 		<input type="number" id="pageNumber"
     onchange="PDFView.page=this.value;parent.changedPage();return false;" value=1 size="4" min="1">
 
