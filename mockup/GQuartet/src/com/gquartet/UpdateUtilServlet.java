@@ -30,7 +30,6 @@ public class UpdateUtilServlet extends HttpServlet {
      String action = req.getParameter("action");
      ServletContext application = getServletConfig().getServletContext();
 
-
      StringBuilder data = new StringBuilder();
 
       try

@@ -46,14 +46,16 @@
 	PDFJS.workerSrc = "pdf.js";
 </script>
 <script type="text/javascript" src="viewer.js"></script>
+<script src="../js/sketcher.js"></script>
+<script src="../js/trigonometry.js"></script>
+<script src="../js/modernizr.custom.34982.js"></script>
+
 <script>
 var talkKey = "<%=talkKey%>";
 console.log(talkKey);
 
-  $(document).ready(function(){
-	getCurrentPage();
-  //window.page = PDFView.page;
-  //console.log("here after setting page "+ PDFView.page);
+$(document).ready(function(){
+//	getCurrentPage();
 });
 
 
@@ -69,23 +71,19 @@ function getCurrentPage(){
 		success: function(data){
       PDFView.page = data;
 
-      setTimeout('getCurrentPage()',500);
+      setTimeout('getCurrentPage()',200);
 		},
 		error: function(XMLHttpRequest, textStatus, errorThrown){
+			console.log("There was an error fetching current page#");
 			setTimeout(
                         'getCurrentPage()', /* Try again after.. */
-                        "15000"); /* milliseconds (15seconds) */
+                        "5000"); /* milliseconds (15seconds) */
                 },
 	});
 }
 
 
 </script>
-
-
-
-
-
 
 
 
@@ -147,6 +145,7 @@ function getCurrentPage(){
 			<img src="images/go-down.svg" align="top" height="16"> Next
 		</button>
 
+
 		<div class="separator"></div>
 		<input type="number" id="pageNumber"
 			onchange="PDFView.page = this.value;" value="1" size="4" min="1">
@@ -207,5 +206,6 @@ function getCurrentPage(){
 
 		<span id="info">--</span>
 	</div>
+
 </body>
 </html>

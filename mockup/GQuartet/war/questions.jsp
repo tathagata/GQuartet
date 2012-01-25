@@ -33,10 +33,50 @@
 	<link rel="stylesheet" href="style.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['gauge']});
+    </script>
+    <script type="text/javascript">
+    var gauge;
+    var gaugeData;
+    var gaugeOptions;
+    function drawGauge() {
+      gaugeData = new google.visualization.DataTable();
+      gaugeData.addColumn('number', 'Oops!');
+      gaugeData.addRows(1);
+      gaugeData.setCell(0, 0, 100);
+    
+      gauge = new google.visualization.Gauge(document.getElementById('gauge'));
+      gaugeOptions = {
+          min: 0, 
+          max: 100, 
+          yellowFrom: 80,
+          yellowTo: 90,
+          redFrom: 90, 
+          redTo: 100, 
+          minorTicks: 5
+      };
+      gaugeData.setValue(0, 0, <%=slide.dislikes%> );
+      gauge.draw(gaugeData, gaugeOptions);
+    }
+    
+    
+    
+    google.setOnLoadCallback(drawGauge);
+    </script>
+
+
+
   </head>
   
 <body>
-  
+   <div class="center-wrapper">
+	<div id="gauge" style="width: 100px; height: 100px;"></div>
+  </div>
+
    <div class="content-primary">
 		<ul data-role="listview" data-theme="c">  
 
@@ -50,13 +90,7 @@
   
   </ul>
   </div>
-  <div class="center-wrapper">
-    <img src='https://chart.googleapis.com/chart?cht=p3&chs=250x100&chd=t:<%=slide.likes%>,<%=slide.dislikes%>&chl=like|dislike&chof=png'>
-  
-  <a href="/navigator.jsp?talkKey=<%=talkKey%>" data-role="button" rel="external">GO back</a>
-
-  </div>
-    <%
+     <%
     }
     else
     {
@@ -65,6 +99,8 @@
         <h5>  Error retrieving questions for requested slide.</h5>
        		<a href="/navigator.jsp?talkKey=<%=talkKey%>" rel="external">GO back</a>
      <% } %>
+
+
  </body>
 </html>
    

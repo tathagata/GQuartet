@@ -48,7 +48,14 @@
 	PDFJS.workerSrc = "pdf.js";
 </script>
 <script type="text/javascript" src="viewer.js"></script>
+<script src="../js/modernizr.custom.34982.js"></script>
+<script src="../js/sketcher.js"></script>
+<script src="../js/trigonometry.js"></script>
+
+
 <script>
+
+
 var talkKey = "<%=talkKey%>";
 console.log(talkKey);
 var called = 0;
@@ -57,40 +64,25 @@ var slideNo = "<%=slideNo%>";
   $(document).ready(function(){
 	getCurrentPage();
   window.page = PDFView.page;
-  //PDFView.page = 5;
   console.log("here after setting page "+ PDFView.page);
 });
 
 
 function getCurrentPage(){
 
-	//var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
-	//console.log(_url);
-	//$.ajax({
-	//	type:"GET",
-	//	url:_url,
-	//	async:true,
-	//	cache: false,
-	//	timeout: 500,
-	//	success: function(data){
-			console.log(called);
-      PDFView.page = slideNo;
+  PDFView.page = slideNo;
 
   if(called<5){
     setTimeout('getCurrentPage()',500);
-    called=called+1; console.log('called is ' + called);
-   }  
-	//	},
-	//	error: function(XMLHttpRequest, textStatus, errorThrown){
-                        //addmsg("error", textStatus + " (" + errorThrown + ")");
-                        //alert("TalkKey:"+talkKey);
-	//		setTimeout(
-    //                    'getCurrentPage()', /* Try again after.. */
-      //                  "15000"); /* milliseconds (15seconds) */
-        //        },
+    called=called+1; //console.log('called is ' + called);
+   }else{
+	if($("#page"+PDFView.page).length){
+	console.log("Fine");
+		sketcher = new Sketcher("page"+parseInt(PDFView.page));
+	}
 
-			
-	//});
+	} 
+ 
 }
 
 
@@ -152,6 +144,10 @@ function getCurrentPage(){
 		</button>
 
 		<div class="separator"></div>
+		<button class="btn primary" id="sync" onclick="parent.paused=true">Sync</button>
+		<button class="btn primary" id="async" onclick="parent.paused=false">Async</button>
+
+		<div class="separator"></div>
 		<input type="number" id="pageNumber"
     onchange="PDFView.page=this.value;parent.changedPage();return false;" value=1 size="4" min="1">
 
@@ -211,5 +207,9 @@ function getCurrentPage(){
 
 		<span id="info">--</span>
 	</div>
+<script>
+
+
+</script>
 </body>
 </html>

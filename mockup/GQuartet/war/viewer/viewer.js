@@ -145,6 +145,7 @@ var PDFView = {
         }
       },
       function getPdfLoad(data) {
+	console.log(data);
         self.loading = true;
         self.load(data, scale);
         self.loading = false;
