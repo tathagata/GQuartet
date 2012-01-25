@@ -6,7 +6,13 @@
  <system-properties>
            <property name="java.util.logging.config.file"
              value="WEB-INF/logging.properties" />
-</system-properties>
+         </system-properties>
+
+
+<!-- Settings for to listen in on channel connections and disconnections-->
+<inbound-services>
+    <service>channel_presence</service>
+</inbound-services>
          
 <sessions-enabled>true</sessions-enabled>
 
