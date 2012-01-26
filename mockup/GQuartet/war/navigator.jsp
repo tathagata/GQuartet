@@ -19,9 +19,8 @@
 	if ((request.getParameter("talkKey"))!=null){
 		talkKey = request.getParameter("talkKey");
 		talk = GQDataStore.GetTalkByKey(talkKey);
-    resourceId = talk.resourceId;
+    		resourceId = talk.resourceId;
 		talkName = talk.talkName;
-		
 	}else{
 		if (request.getParameter("resourceId")!=null){
 			resourceId = request.getParameter("resourceId");
@@ -31,16 +30,14 @@
 		}
 
 
-    talkName = talkName.substring(0,3);
+    		talkName = talkName.substring(0,3);
 
-    Calendar cal = Calendar.getInstance();
-    String timestamp = String.format("%1$tH%1$tM%1$tS", cal);
-
-
+		Calendar cal = Calendar.getInstance();
+		String timestamp = String.format("%1$tH%1$tM%1$tS", cal);
 		talkKey =  GQDataStore.AddNewTalk(resourceId
-                , new Date() 
-                , talkName + "_" + timestamp );
-		
+			, new Date() 
+			, talkName + "_" + timestamp );
+			
 		talk = GQDataStore.GetTalkByKey(talkKey);
 	}
 %>
@@ -75,54 +72,19 @@
         $(document).ready(function() {
             $("#previous").click(function(){
                 var formData = $("#callPrevious").serialize();
-			console.log("movesidefwd");
 		var _talkKey = "<%=talkKey%>";
 		$.post("navigator", {"talkKey":_talkKey, "action":"moveSlideBackward"}, function(data){
-			console.log(data);
 			$("#notification").text(data);
 		});
- 		/*
-                $.ajax({
-                    type: "POST",
-                    url: "navigator",
-                    cache: false,
-                    data: formData,
-                    data: {talkKey:talkKey, action:"moveSlideBackward"},
-                    success: onSuccess,
-                    error: onError
-                });
- 		
-                return false;
-		*/
             });
 	$("#next").click(function(){
-			console.log("movesideForward");
 		var _talkKey = "<%=talkKey%>";
  		$.post("navigator", {"talkKey":_talkKey, "action":"moveSlideForward"}, function(data){
-			console.log(data);
 			$("#notification").text(data);
 		});
-		/*
-			console.log("Next pressed" + talkKey + talkName);
-                var formData = $("#callNext").serialize();
- 
-		$.post("navigator", {talkKey:talkKey, action:"moveSlideForward"});
-                $.ajax({
-                    type: "POST",
-                    url: "navigator",
-                    cache: false,
-                    data: {talkKey:talkKey, action:"moveSlideForward"},
-                    success: onSuccess,
-                    error: onError
-                });
- 
-                return false;
-		*/
             });
 	$("#showQ").click(function(){
- 
                 var formData = $("#showQuestions").serialize();
- 
                 $.ajax({
                     type: "POST",
                     url: "questions.jsp",

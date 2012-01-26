@@ -61,7 +61,7 @@ $("#question-input").hide();
 	%>
   
     <li>
-      <a href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
+      <a href="/slideshow.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
     
     </li>
     <% } %>

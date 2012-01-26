@@ -62,7 +62,7 @@ var called = 0;
 var slideNo = "<%=slideNo%>";
 
   $(document).ready(function(){
-	getCurrentPage();
+//	getCurrentPage();
   window.page = PDFView.page;
   console.log("here after setting page "+ PDFView.page);
 });
