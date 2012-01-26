@@ -1,6 +1,10 @@
 .center-wrapper{
 text-align: center;
+width:500px;
+height:500px;
 }
 .center-wrapper * {
 margin: 0 auto;
+width:500px;
+height:500px;
 }

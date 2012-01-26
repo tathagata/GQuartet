@@ -28,11 +28,7 @@
   <head>
        
     <title>Questions</title> 
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
 	<link rel="stylesheet" href="style.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
 
 
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -76,19 +72,15 @@
   </head>
   
 <body>
-   <div class="center-wrapper">
-	<div id="gaugegotit" style="width: 500px; height: 500px;"></div>
-	<div id="gaugeoops" style="width: 500px; height: 500px;"></div>
-  </div>
-
-   <div class="content-primary">
-		<ul data-role="listview" data-theme="c">  
+   
+   <div>
+		<ul>  
 
     <% 
 	String talkName = "";
     for ( Question q : slide.questions ) { %>
-		<li>    
-    		<%= q.questionText %>
+		<li> 
+    		<span style="font-size:20px;"><b><%= q.questionText %></b></span>
 		</li>
   <% } %>
   
@@ -103,12 +95,7 @@
         <h5>  Error retrieving questions for requested slide.</h5>
        		<a href="/navigator.jsp?talkKey=<%=talkKey%>" rel="external">GO back</a>
      <% } %>
-
+	<div id="gaugegotit" style="width: 400px; height: 400px;"></div>
 
  </body>
 </html>
-   
-
-
-
-

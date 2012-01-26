@@ -51,42 +51,6 @@
 
 <script	type="text/javascript" src="js/bootstrap-modal.js"></script>
 <script type="text/javascript" src="/_ah/channel/jsapi"></script> 
-<script>
-		var paused = false;
-	
-   		onOpened = function() {
-    			connected = true;
-			console.log("Opened and connected");
-    		};
-		onError = function(){
-			console.log("There has been an error");
-		}
-		onClose = function(){
-			//alert("Connection tear down complete");
-		}
-    onMessage = function(e){
-      var pattern = "Question";
-      var index = e.data.search(pattern);
-      console.log("outside if " + e.data);
-      if ( index > -1 )
-      {
-          var pageNumber = $("#slide").contents().find("#pageNumber").val();
-          console.log("pagenumber changed to " + pageNumber );
-           $.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
-              console.log("inside condition " + data);
-            });
-        }
-      }
-
-    		channel = new goog.appengine.Channel('<%=token%>');
-    		socket = channel.open();
-    		socket.onopen = onOpened;
-    		socket.onmessage = onMessage;
-    		socket.onerror = onError;
-    		socket.onclose = onClose;
-
-	</script>
-
 	
 <div class="topbar" data-dropdown="dropdown">
 		<div class="topbar-inner">
@@ -109,6 +73,50 @@
 
 <div class="content">
             <iframe id="slide" src="viewer/guestviewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>" frameborder="0" style="border: 0; width: 100%; height: 810px;"></iframe>   
+
+<script>
+		var paused = false;
+	
+   		onOpened = function() {
+    			connected = true;
+			console.log("Opened and connected");
+    		};
+		onError = function(){
+			console.log("There has been an error");
+		}
+		onClose = function(){
+			//alert("Connection tear down complete");
+		}
+    		onMessage = function(e){
+      		var pattern = "Question";
+      		var index = e.data.search(pattern);
+      		if ( index > -1 ){
+          		var pageNumber = $("#slide").contents().find("#pageNumber").val();
+          		console.log("pagenumber changed to " + pageNumber );
+           		$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
+              		console.log("inside condition " + data);
+			try{
+				$("#slide").contents().find("#aggregatedquestions").html("Questions(" + data.split(':')[1]+")");	
+			}catch(err){}
+            			});
+        		}
+      		}
+
+    		channel = new goog.appengine.Channel('<%=token%>');
+    		socket = channel.open();
+    		socket.onopen = onOpened;
+    		socket.onmessage = onMessage;
+    		socket.onerror = onError;
+    		socket.onclose = onClose;
+
+</script>
+
+
+
+
+
+
+
 <div>
 	<div class="modal hide fade" id="modal-from-dom" style="display: block; height:640px; width:1020px; margin-left:-520px;">
             	<div class="modal-header">
@@ -121,13 +129,13 @@
           </div>
 </div>
 <div>
-	<div class="modal hide fade" id="modal-for-drawing" style="display:block; height:640px; width:1020px; margin-left:-520px;">
+	<div class="modal hide fade" id="modal-for-drawing" style="display:block; height:700px; width:1020px; margin-left:-520px;margin-top:-200px;">
 	     	<div class="modal-header">
               		<a class="close" href="#">×</a>
               		<h3>Scratchpad</h3>
             	</div>
             	<div class="modal-body">
-			<iframe src="scratch/lineTo.html" height=100% width=100% frameborder=0></iframe>
+			<iframe src="scratch/lineTo.html" height=90% width=100% frameborder=0></iframe>
 		</div>
         </div>
 </div>
