@@ -74,7 +74,7 @@
   
 <body>
    <div class="center-wrapper">
-	<div id="gauge" style="width: 100px; height: 100px;"></div>
+	<div id="gauge" style="width: 200px; height: 200px;"></div>
   </div>
 
    <div class="content-primary">

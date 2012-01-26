@@ -49,45 +49,7 @@
 <script src="../js/sketcher.js"></script>
 <script src="../js/trigonometry.js"></script>
 <script src="../js/modernizr.custom.34982.js"></script>
-
-<script>
-var talkKey = "<%=talkKey%>";
-console.log(talkKey);
-
-$(document).ready(function(){
-//	getCurrentPage();
-});
-
-
-function getCurrentPage(){
-
-	var _url = "../getTalkInfo?action=getCurrentSlide&talkKey="+talkKey;
-	$.ajax({
-		type:"GET",
-		url:_url,
-		async:true,
-		cache: false,
-		timeout: 500,
-		success: function(data){
-      PDFView.page = data;
-
-      setTimeout('getCurrentPage()',200);
-		},
-		error: function(XMLHttpRequest, textStatus, errorThrown){
-			console.log("There was an error fetching current page#");
-			setTimeout(
-                        'getCurrentPage()', /* Try again after.. */
-                        "5000"); /* milliseconds (15seconds) */
-                },
-	});
-}
-
-
-</script>
-
-
-
-
+<script	type="text/javascript" src="../js/bootstrap-modal.js"></script>
 
 </head>
 
@@ -108,6 +70,8 @@ function getCurrentPage(){
 		<div class="clearBoth"></div>
 		<div id="errorMoreInfo" hidden='true'></div>
 	</div>
+
+
 
 	<div id="sidebar">
 		<div id="sidebarBox">
@@ -143,6 +107,10 @@ function getCurrentPage(){
 		<button class="btn primary" id="next" onclick="PDFView.page++;"
 			oncontextmenu="return false;">
 			<img src="images/go-down.svg" align="top" height="16"> Next
+		</button>
+
+		<button class="btn primary" id="test" onclick="" oncontextmenu="return false;">
+			<img src="images/go-down.svg" align="top" height="16"> Test
 		</button>
 
 
@@ -190,9 +158,7 @@ function getCurrentPage(){
 			<img src="images/download.svg" align="top" height="16">
 			Download
 		</button>
-
 		<div class="separator"></div>
-
 		<input id="fileInput" type="file" oncontextmenu="return false;">
 
 		<div class="separator"></div>
@@ -203,8 +169,16 @@ function getCurrentPage(){
 		</a>
 
 		<div class="separator"></div>
+		<button class="btn primary" id="aggregatedquestions" onclick="" oncontextmenu="return false;">
+			<img src="../images/Question.png" align="top" height="16"> Questions
+		</button>
+		<div class="separator"></div>
+		<button class="btn primary" id="scratchpad" onclick="" oncontextmenu="return false;">
+			<img src="images/go-down.svg" align="top" height="16"> Scratchpad
+		</button>
 
 		<span id="info">--</span>
+		
 	</div>
 
 </body>
