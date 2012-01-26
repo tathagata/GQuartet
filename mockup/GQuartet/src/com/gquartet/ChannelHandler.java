@@ -13,7 +13,7 @@ public class ChannelHandler extends HttpServlet {
   static final Logger log = Logger.getLogger(ChannelHandler.class.getName()); 
 
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
       ServletContext appContext = getServletConfig().getServletContext();

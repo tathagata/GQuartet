@@ -74,8 +74,14 @@
 
     <servlet-mapping>
         <servlet-name>ChannelHandler</servlet-name>
-        <url-pattern>/_ah/channel/*</url-pattern>
-     </servlet-mapping>
+        <url-pattern>/_ah/channel/connected/</url-pattern>
+      </servlet-mapping>
+
+      <servlet-mapping>
+        <servlet-name>ChannelHandler</servlet-name>
+        <url-pattern>/_ah/channel/disconnected/</url-pattern>
+      </servlet-mapping>
+
 
 
 

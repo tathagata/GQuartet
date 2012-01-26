@@ -89,8 +89,10 @@
           if (paused!=true)
           {
                console.log("will refresh slide to " + newPageNumber);
+               channel.close();
+               console.log("channel closed");
             	 window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+newPageNumber;
-             }
+          }
       }
 		}
 
@@ -120,7 +122,9 @@
 
 <div id="showslides" style="width:65%; height:880px; background-color:#ffffff; position:relative; 
             margin-top:5px; margin-left:5px; float:left; padding-left:5px; border:0px">
-	
+            <script>
+              var changedPage;
+            </script>
 	<iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width=100% height=100%></iframe>
 </div> 
 <script>
@@ -139,10 +143,10 @@
         	$("#slide").contents().find("#async").show();
 	});
 	
-	function changedPage(){
-	var pageNumber;
-		pageNumber =$("#slide").contents().find("#pageNumber").val();
-    		console.log("changedPage function was called due to a manual change on page by user "+pageNumber);
+  changedPage = function changedPageHandler(){
+	      var pageNumber;
+		    pageNumber =$("#slide").contents().find("#pageNumber").val();
+        console.log("changedPage function was called due to a manual change on page by user "+pageNumber);
     		window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+pageNumber;
 	}	
 	});

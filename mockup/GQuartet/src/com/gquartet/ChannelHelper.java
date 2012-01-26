@@ -97,7 +97,14 @@ public class ChannelHelper
       if ( list == null ) return;
 
       log.warning("Removing channel with clientId = " + clientId + "from list.");
-      list.remove(clientId);
+      try
+      {
+        list.remove(clientId);
+      }
+      catch(Exception ex)
+      {
+          log.warning("error removing channel client id reference from appContext list " + e.getMessage());
+      }
 
     }
 
