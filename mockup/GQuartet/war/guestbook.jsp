@@ -79,11 +79,19 @@
     		onMessage = function(e){
 			var pageNumber;
 			console.log(paused);
-			pageNumber =$("#slide").contents().find("#pageNumber").val();
-			var	newPageNumber = e.data.substring(8,e.data.length);
+      pageNumber =$("#slide").contents().find("#pageNumber").val();
+      console.log("Message that was recieved = "  + e.data);
+      var pattern = "SlideNo:"
+      if ( e.data.search(pattern) > -1 )
+      {
+			    var	newPageNumber = e.data.substring(8,e.data.length);
     			console.log("changed by channel Api "+newPageNumber);
-    			if (paused!=true)
-    				window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+newPageNumber;
+          if (paused!=true)
+          {
+               console.log("will refresh slide to " + newPageNumber);
+            	 window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+newPageNumber;
+             }
+      }
 		}
 
     		channel = new goog.appengine.Channel('<%=token%>');
