@@ -11,6 +11,7 @@ import com.google.gdata.data.Link;
 
 import java.io.IOException;
 import javax.servlet.http.*;
+import javax.servlet.*;
 import java.util.logging.Logger;
 import java.util.*;
 import com.google.gdata.data.docs.DocumentEntry;
@@ -27,8 +28,7 @@ public class UpdateUtilServlet extends HttpServlet {
 
      log.warning("Action called for was " + req.getParameter("action"));
      String action = req.getParameter("action");
-
-
+     ServletContext application = getServletConfig().getServletContext();
 
      StringBuilder data = new StringBuilder();
 
@@ -39,8 +39,7 @@ public class UpdateUtilServlet extends HttpServlet {
     if ( "addQuestion".equals(action) )
     {
 
-      log.warning("Adding a new question");
-
+       log.warning("Adding a new question");
 
        Slide slide = GQDataStore.GetSlideBySlideNo((String)req.getParameter("parentKey"), Long.parseLong(req.getParameter("slideNo")));
 
@@ -51,6 +50,9 @@ public class UpdateUtilServlet extends HttpServlet {
        Entity questionEntity = GQDataStore.GetEntityByKey(key);
        Question q = Question.GetQuestion(questionEntity);
        data.append(q.key).append("|").append(q.questionText.replace("|"," ")).append("|").append(q.rating);
+
+       ChannelHelper.broadcastNewQuestion(application, q);
+
     }
   
   if ( "addComment".equals(action) )
@@ -118,7 +120,6 @@ public class UpdateUtilServlet extends HttpServlet {
      }
 
     resp.setContentType("text/plain");
-    resp.getWriter().println("Hello there");
     resp.getWriter().println(data.toString());
 
   }
@@ -130,7 +131,6 @@ public class UpdateUtilServlet extends HttpServlet {
    
     
     resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
 
 	}
 

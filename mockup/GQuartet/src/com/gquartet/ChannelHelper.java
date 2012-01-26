@@ -1,5 +1,7 @@
 package com.gquartet;
 
+import com.gquartet.data.*;
+
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
@@ -67,13 +69,42 @@ public class ChannelHelper
         }
     }
 
+    public static void broadcastNewQuestion(ServletContext appContext, Question q )
+    {
+        log.warning("Broadcasting new question change = " + q.questionText );
+
+        //broadcast new question.
+        ChannelService channelService = ChannelServiceFactory.getChannelService();
+        HashMap<String,String> channelKeyList = (HashMap<String,String>) appContext.getAttribute(CLIENTID_LIST);
+        if ( channelKeyList != null ) 
+        {
+          for ( String channelKey : channelKeyList.keySet() )
+          {
+            log.warning("Pushing new question  onto channel with key = " + channelKey);
+            
+            channelService.sendMessage(new ChannelMessage(channelKey, "\"Question\" : { " + q.toJSON() + " }" ));
+
+
+          }
+        }
+    }
+
+
+
     public static void removeFromAppList(ServletContext appContext, String clientId)
     {
       HashMap<String,String> list = (HashMap<String,String>)appContext.getAttribute(CLIENTID_LIST);
       if ( list == null ) return;
 
       log.warning("Removing channel with clientId = " + clientId + "from list.");
-      list.remove(clientId);
+      try
+      {
+        list.remove(clientId);
+      }
+      catch(Exception ex)
+      {
+          log.warning("error removing channel client id reference from appContext list " + ex.getMessage());
+      }
 
     }
 

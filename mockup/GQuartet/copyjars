@@ -1,7 +1,7 @@
 #!/bin/bash
 #TODO: put this in the ant file or maven
-gdata_path=/home/tathagata/projects/google/gdata/java/lib
-web_inf_path=/home/tathagata/projects/gcc/mockup/GQuartet/war/WEB-INF/lib
+gdata_path=/scratch/tdg/projects/gquartet/gdata/java/lib
+web_inf_path=/scratch/tdg/projects/gquartet/GQuartet/mockup/GQuartet/war
 
 cp $gdata_path/gdata-books-1.0.jar $web_inf_path/.
 cp $gdata_path/gdata-books-meta-1.0.jar $web_inf_path/.

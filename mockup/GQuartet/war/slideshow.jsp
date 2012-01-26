@@ -3,6 +3,7 @@
 <%@page import="com.google.appengine.api.datastore.DatastoreServiceFactory"%>
 <%@page import="com.google.appengine.api.datastore.*"%>
 <%@page import="com.gquartet.data.*"%>
+<%@page import="com.gquartet.*"%>
 <%@page import="java.io.IOException"%>
 <%@page import="java.util.*"%>
 <%@ include file="header.jsp"%>
@@ -12,7 +13,8 @@
 	Talk talk; 
 	String resourceId = "";
 	String talkName = "";
-	long slideNo=0;
+  long slideNo=0;
+  String token="";
 	
 	if ((request.getParameter("talkKey"))!=null){
 		talkKey = request.getParameter("talkKey");
@@ -35,15 +37,55 @@
 		String timestamp = String.format("%1$tH%1$tM%1$tS", cal);
 		talkKey =  GQDataStore.AddNewTalk(resourceId
 			, new Date() 
-			, talkName + "_" + timestamp );
+      , talkName + "_" + timestamp );
+
+    	Calendar cal1 = Calendar.getInstance();
+    	String clientname = String.format("%1$tH%1$tM%1$tS", cal1);
+			token = ChannelHelper.addChannel(application, ChannelHelper.getChannelKey(clientname, "Slideshow_" + talkName + "_" + timestamp ));
 			
-		talk = GQDataStore.GetTalkByKey(talkKey);
+		  talk = GQDataStore.GetTalkByKey(talkKey);
 	}
 %>
 
 
 
 <script	type="text/javascript" src="js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="/_ah/channel/jsapi"></script> 
+<script>
+		var paused = false;
+	
+   		onOpened = function() {
+    			connected = true;
+			console.log("Opened and connected");
+    		};
+		onError = function(){
+			console.log("There has been an error");
+		}
+		onClose = function(){
+			//alert("Connection tear down complete");
+		}
+    onMessage = function(e){
+      var pattern = "Question";
+      var index = e.data.search(pattern);
+      console.log("outside if " + e.data);
+      if ( index > -1 )
+      {
+          var pageNumber = $("#slide").contents().find("#pageNumber").val();
+          console.log("pagenumber changed to " + pageNumber );
+           $.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
+              console.log("inside condition " + data);
+            });
+        }
+      }
+
+    		channel = new goog.appengine.Channel('<%=token%>');
+    		socket = channel.open();
+    		socket.onopen = onOpened;
+    		socket.onmessage = onMessage;
+    		socket.onerror = onError;
+    		socket.onclose = onClose;
+
+	</script>
 
 	
 <div class="topbar" data-dropdown="dropdown">
@@ -102,17 +144,30 @@
                  $('#modal-for-drawing').modal({keyboard:true, backdrop:true});
 
         $("#slide").contents().find("#previous").click(function(){
-		console.log("previous clicked");
-		$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"moveSlideBackward"}, function(data){
-			console.log(data);
-			});
-		});
-	$("#slide").contents().find("#next").click(function(){
-		console.log("next clicked");
-		$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"moveSlideForward"}, function(data){
-			console.log(data);
-		});
+          console.log("previous clicked");
+	    var pageNumber = $("#slide").contents().find("#pageNumber").val();
+	    console.log("pagenumber changed to " + pageNumber );
+			$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"moveSlideBackward", "currentSlideNo":pageNumber}, function(data){
+				console.log(data);
+				});
+	    $.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
+				console.log(data);
+    });
+  });
 
+
+
+	
+	$("#slide").contents().find("#next").click(function(){
+	    console.log("next clicked");
+	    var pageNumber = $("#slide").contents().find("#pageNumber").val();
+	    console.log("pagenumber changed to " + pageNumber );
+		$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"moveSlideForward", "currentSlideNo":pageNumber}, function(data){
+			console.log(data);
+		});
+    $.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
+			console.log(data);
+    });
 		});
 	
 	$("#slide").contents().find("#aggregatedquestions").click(function(){
@@ -125,7 +180,9 @@
                  $('#modal-for-drawing').modal('toggle');
 		});
 	
-	});
+  });
+
+
 
 </script>
 </div>

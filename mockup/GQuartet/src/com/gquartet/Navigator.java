@@ -27,7 +27,8 @@ public class Navigator extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
-  ServletContext application = getServletConfig().getServletContext();
+      log.warning("Inside doPost of navigator");
+      ServletContext application = getServletConfig().getServletContext();
       
       log.warning(req.getParameter("action"));
       String action = req.getParameter("action");
@@ -38,28 +39,22 @@ public class Navigator extends HttpServlet {
       {
 
         String talkKey = req.getParameter("talkKey");
+        String newSlideNo = req.getParameter("currentSlideNo");
 
-        log.warning("Moving Slide forward");
-        Talk talk = GQDataStore.GetTalkByKey(talkKey);
-        long slideNo = talk.activeSlideNo; 
-        
-        if ( "moveSlideForward".equals(action) )
-          slideNo = slideNo +1;  //TODO: What happens to invalid slideNo
-        else
+        if ( newSlideNo != null )
         {
-          slideNo = slideNo -1;
-          if ( slideNo <= 0 ) slideNo = 1;
+            log.warning("Setting current active slide no =" + newSlideNo );
+            GQDataStore.UpdateActiveSlideNo(talkKey, Long.parseLong(newSlideNo));
         }
+        
+        log.warning("Update complete :  Talk Key=" + talkKey + " active slide no = " + newSlideNo );
 
-        GQDataStore.UpdateActiveSlideNo(talkKey, slideNo);
-        log.warning("Update complete :  Talk Name=" + talk.talkName + " active slide no = " + slideNo );
 
+        application.setAttribute("ACTIVE_SLIDE_NO", newSlideNo);
+        log.warning("latest slide no " + newSlideNo);
+        data.append("SlideNo:"+newSlideNo);
 
-        application.setAttribute("ACTIVE_SLIDE_NO", slideNo);
-        log.warning("latest slide no " + slideNo);
-        data.append("SlideNo:"+slideNo);
-
-        ChannelHelper.broadcastSlideChange(application, slideNo);
+        ChannelHelper.broadcastSlideChange(application, Long.parseLong(newSlideNo));
 
       }
       else if ( "getToken".equals(action) )
@@ -72,6 +67,16 @@ public class Navigator extends HttpServlet {
         String token = ChannelHelper.addChannel(application, ChannelHelper.getChannelKey(clientName, talkName));
         data.append("Token:"+token);
       }
+      else if ( "getQuestionCount".equals(action) )
+      {
+        
+        String talkKey = req.getParameter("talkKey");
+        String slideNo = req.getParameter("currentSlideNo");
+
+        Slide slide = GQDataStore.GetSlideQuestionsAndComments(talkKey, Long.parseLong(slideNo));
+        data.append("QuestionCount:"+slide.questions.size());
+
+      }
 
     resp.setContentType("text/plain");
     resp.getWriter().println(data.toString());
@@ -83,8 +88,9 @@ public class Navigator extends HttpServlet {
 			throws IOException {
    
     
-    resp.setContentType("text/plain");
-		resp.getWriter().println("Hello, world");
+    //resp.setContentType("text/plain");
+      doPost(req, resp);
+		//resp.getWriter().println("Hello, world");
 
 	}
 }

@@ -66,6 +66,7 @@
 	<script>
 		var paused = false;
 	
+    		channel = new goog.appengine.Channel('<%=token%>');
    		onOpened = function() {
     			connected = true;
 			console.log("Opened and connected");
@@ -79,14 +80,21 @@
     		onMessage = function(e){
 			var pageNumber;
 			console.log(paused);
-			pageNumber =$("#slide").contents().find("#pageNumber").val();
-			var	newPageNumber = e.data.substring(8,e.data.length);
-    			console.log("changed by channel Api "+newPageNumber);
-    			if (paused!=true)
-    				window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+newPageNumber;
+      			pageNumber =$("#slide").contents().find("#pageNumber").val();
+      			console.log("Message that was recieved = "  + e.data);
+      			var pattern = "SlideNo:"
+      			if ( e.data.search(pattern) > -1 ){
+			    	var	newPageNumber = e.data.substring(8,e.data.length);
+    				console.log("changed by channel Api "+newPageNumber);
+          		if (paused!=true) 		{
+               			console.log("will refresh slide to " + newPageNumber);
+               			//channel.close();
+               			//console.log("channel closed");
+            	 		window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+newPageNumber;
+          			}
+      			}
 		}
 
-    		channel = new goog.appengine.Channel('<%=token%>');
     		socket = channel.open();
     		socket.onopen = onOpened;
     		socket.onmessage = onMessage;
@@ -112,7 +120,9 @@
 
 <div id="showslides" style="width:65%; height:880px; background-color:#ffffff; position:relative; 
             margin-top:5px; margin-left:5px; float:left; padding-left:5px; border:0px">
-	
+            <script>
+              var changedPage;
+            </script>
 	<iframe id="slide" src="viewer/viewer.jsp?talkKey=<%=talkKey%>&resourceId=<%=resourceId%>&slideNo=<%=slideNo%>" frameborder="0" width=100% height=100%></iframe>
 </div> 
 <script>
@@ -131,10 +141,10 @@
         	$("#slide").contents().find("#async").show();
 	});
 	
-	function changedPage(){
-	var pageNumber;
-		pageNumber =$("#slide").contents().find("#pageNumber").val();
-    		console.log("changedPage function was called due to a manual change on page by user "+pageNumber);
+  changedPage = function changedPageHandler(){
+	      var pageNumber;
+		    pageNumber =$("#slide").contents().find("#pageNumber").val();
+        console.log("changedPage function was called due to a manual change on page by user "+pageNumber);
     		window.location = "/guestbook.jsp?talkName=<%=talkName%>&slideNo="+pageNumber;
 	}	
 	});
