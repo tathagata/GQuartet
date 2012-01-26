@@ -45,11 +45,13 @@
     var gaugeOptions;
     function drawGauge() {
       gaugeData = new google.visualization.DataTable();
+      gaugeData.addColumn('number', 'Cool!');
       gaugeData.addColumn('number', 'Oops!');
-      gaugeData.addRows(1);
+      gaugeData.addRows(2);
       gaugeData.setCell(0, 0, 100);
+      gaugeData.setCell(0, 1, 100);
     
-      gauge = new google.visualization.Gauge(document.getElementById('gauge'));
+      gauge = new google.visualization.Gauge(document.getElementById('gaugegotit'));
       gaugeOptions = {
           min: 0, 
           max: 100, 
@@ -59,7 +61,8 @@
           redTo: 100, 
           minorTicks: 5
       };
-      gaugeData.setValue(0, 0, <%=slide.dislikes%> );
+      gaugeData.setValue(0, 0, <%=slide.likes%> );
+      gaugeData.setValue(0, 1, <%=slide.dislikes%> );
       gauge.draw(gaugeData, gaugeOptions);
     }
     
@@ -74,7 +77,8 @@
   
 <body>
    <div class="center-wrapper">
-	<div id="gauge" style="width: 200px; height: 200px;"></div>
+	<div id="gaugegotit" style="width: 500px; height: 500px;"></div>
+	<div id="gaugeoops" style="width: 500px; height: 500px;"></div>
   </div>
 
    <div class="content-primary">

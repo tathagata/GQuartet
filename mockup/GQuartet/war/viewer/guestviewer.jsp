@@ -109,11 +109,7 @@
 			<img src="images/go-down.svg" align="top" height="16"> Next
 		</button>
 
-		<button class="btn primary" id="test" onclick="" oncontextmenu="return false;">
-			<img src="images/go-down.svg" align="top" height="16"> Test
-		</button>
-
-
+	
 		<div class="separator"></div>
 		<input type="number" id="pageNumber"
 			onchange="PDFView.page = this.value;" value="1" size="4" min="1">
@@ -161,21 +157,27 @@
 		<div class="separator"></div>
 		<input id="fileInput" type="file" oncontextmenu="return false;">
 
+		
 		<div class="separator"></div>
 
+		<button class="btn primary pull-right" id="aggregatedquestions" onclick="" oncontextmenu="return false;">
+			<img src="../images/Question.png" align="top" height="16"> Questions
+		</button>
+		<div class="separator"></div>
+
+		<button class="btn primary pull-right" id="scratchpad" onclick="" oncontextmenu="return false;">
+			 Scratchpad
+		</button>
+	
+
+		<div class="separator"></div>
+		
 		<a href="#" id="viewBookmark"
 			title="Bookmark (or copy) current location"> <img
 			src="images/bookmark.svg" alt="Bookmark" align="top" height="16">
 		</a>
 
 		<div class="separator"></div>
-		<button class="btn primary" id="aggregatedquestions" onclick="" oncontextmenu="return false;">
-			<img src="../images/Question.png" align="top" height="16"> Questions
-		</button>
-		<div class="separator"></div>
-		<button class="btn primary" id="scratchpad" onclick="" oncontextmenu="return false;">
-			<img src="images/go-down.svg" align="top" height="16"> Scratchpad
-		</button>
 
 		<span id="info">--</span>
 		
