@@ -29,8 +29,8 @@
     			talkKey = t.key;
     
 			Calendar cal = Calendar.getInstance();
-    			String clientname = String.format("%1$tH%1$tM%1$tS", cal);
-			token = ChannelHelper.addChannel(application, ChannelHelper.getChannelKey(clientname, talkName));
+    			long clientname =  System.currentTimeMillis();  //String.format("%1$tH%1$tM%1$tS", cal);
+			token = ChannelHelper.addChannel(application, ChannelHelper.getChannelKey(String.valueOf(clientname), talkName));
 
   		}else{
   			//log.warning("Talk Name:" + talkName+" was not found");
@@ -52,6 +52,29 @@
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
   	<script type="text/javascript" src="/_ah/channel/jsapi"></script> 
+
+
+	<style type="text/css">
+		.defaultIcon
+		{
+		background-image: url('images/QuestionIcon.png') !important;
+		background-position:left top;
+		width: 50px;
+		height: 50px;
+		}
+
+		.selectedIcon
+		{
+		background-image: url('images/QuestionIcon.png') !important;
+		background-position:left top;
+		width: 50px;
+		height: 50px;
+		}
+
+	</style>
+
+
+
 	<script>
   
   		$(document).ready(function() {
@@ -59,6 +82,7 @@
     			$("#listofquestions" ).accordion({ autoHeight: false });
     			$("#listofquestions" ).accordion({ collapsible: true });
     			$("#listofquestions" ).accordion({ autoHeight: false });
+			$("#listofquestions" ).accordion("option", "icons",	{ 'header': 'defaultIcon', 'headerSelected': 'selectedIcon'});
    		});
   
 	</script>
@@ -141,7 +165,7 @@
         	$("#slide").contents().find("#async").show();
 	});
 	
-  changedPage = function changedPageHandler(){
+	changedPage = function changedPageHandler(){
 	      var pageNumber;
 		    pageNumber =$("#slide").contents().find("#pageNumber").val();
         console.log("changedPage function was called due to a manual change on page by user "+pageNumber);
@@ -165,12 +189,17 @@
         </div>
         
 	<script >
+	/*
 	$("#question").submit(function (event){
         	event.preventDefault();
             	var $form = $(this),
             	questionText = $form.find('textarea[name="questionText"]').val(),
             	url = '/updateutil';
             	console.log("Question text is:"+questionText + "for slide no"+ <%=slideNo%>);
+
+
+
+
 
 
             	$.post("/updateutil", {"action":"addQuestion", "parentKey":"<%=talkKey%>", "slideNo":<%=slideNo%>, "questionText":questionText, "rating":0 },function(data){
@@ -186,6 +215,59 @@
               		$form.find('textarea[name="questionText"]').val('');
             	});
 	});
+	*/
+
+
+ $("#question").submit(function (event){
+            event.preventDefault();
+            var $form = $(this),
+            questionText = $form.find('textarea[name="questionText"]').val(),
+            url = '/updateutil';
+            console.log("Question text is:"+questionText + "for slide no"+ <%=slideNo%>);
+
+
+            $.post("/updateutil", {"action":"addQuestion", "parentKey":"<%=talkKey%>", "slideNo":<%=slideNo%>, "questionText":questionText, "rating":0 },function(data){
+              console.log("Got back the response: "+data);
+              var questiondata = data.split('|');
+              var questionkey = questiondata[0];
+                           
+              var newquestionchild = "<div id=qbody style='font-size: 100%;' class='ui-accordion-header ui-helper-reset ui-state-default ui-corner-all' role='tab' aria-expanded='true' aria-selected='true' tabindex='0'>"
+            	  				   + "<span class='ui-icon defaultIcon'></span>"
+            	  				   + "<h3 style='padding-top:7px;padding-left:7px;'>"
+          						   + "<a href='#'>" +questiondata[1]+"</a>"
+          						   + "</h3>"
+        					       + "</div>";
+        					       
+        					       
+        					       <!-- ########COMMENT TEXT BOX ###########-->
+        				        	       					        
+        		 newquestionchild +="<div class='ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active' style='display: block; padding-top: 9px; padding-bottom: 9px; overflow-x: auto; overflow-y: auto;' role='tabpanel'>"
+        			 			  + "<div id='commentList"+questionkey+"'  style='padding-left:25px; font-size: 115%;'>"
+        		 				  + "</div>"
+        			 			  + "<div style = 'padding-left:25px;'>"
+        			              + "<form id='"+questionkey+"'>"
+        			            		+ "<input type='hidden' name='parentKey' value='"+questionkey+"'>"
+        			            		+ "<input type='hidden' name='rating' value='0'>"
+        			            		+ "<textarea type='text' rows='3' name='commentText' style='width:95%;'></textarea>"
+        			            		+ "<button class='btn success' onclick='submitComment(\""+questionkey+"\");return false'>Comment</button>"
+        			          	  + "</form>"
+        			        	  + "</div>"
+        			        	  + "</div>";
+        			        		<!-- ########END OF COMMENT TEXT BOX ###########-->
+        			        		
+        			        		
+              console.log(newquestionchild);
+              
+              $("#listofquestions").last().append(newquestionchild);
+              $("#listofquestions").accordion();
+              
+              $form.find('textarea[name="questionText"]').val('');
+              
+
+            });
+          });
+
+
 	</script>
    
         <% 
@@ -203,15 +285,18 @@
 		<% for ( Question q : questions ){ %>
         
         	<div id='qbody' style="font-size: 135%;">
-         		<a href="#"><%=q.questionText %></a>
+			<h3 style="padding-top:7px;padding-left:7px;">
+  					  <a href="#"><%=q.questionText %></a>
+          		</h3>
         	</div>
            
          	<div>
+
+          		<div id="commentList<%=q.key%>"  style="padding-left:25px; font-size: 115%;">
           		<%
 				List<Comment> comments  = q.comments;
           			for ( Comment c : comments ){
 	       		%>
-          		<div id="commentList<%=q.key%>"  style="padding-left:25px; font-size: 115%;">
             			<div>
               				<%=c.commentText%>
               				<br>
@@ -242,8 +327,8 @@
 
                	$.post("/updateutil", {"action":"addComment", "parentKey":questionKey, "commentText":questionText, "rating":0 },function(data){
                		var datasplit = data.split('|');
-               		var imageurl = "<img src='http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png' height=15 width=20>"; 
-               		var newchild = "<div class='span11 offset'><hr>"+datasplit[1]+"<br>"+imageurl+"&nbsp;"+ datasplit[2]+"</div>" 
+               		var imageurl = "<img src='http://wewillraakyou.com/wp-content/uploads/2011/06/google-plus1.png' height=20 width=25>"; 
+               		var newchild = "<div class='span11 offset'><hr>"+datasplit[1]+"<br>"+imageurl+"&nbsp;"+ datasplit[2]+"</div>"; 
                		$("#commentList"+questionKey).last().append(newchild);
                		$form.find('textarea[name="commentText"]').val('');
         	});
@@ -254,7 +339,9 @@
 <div id="feedback" class="center-wrapper" style="padding-left:10px;">
     <a id="like" class="btn primary">Got it!</a>
     <a id="dislike" class="btn primary">   Oops!   </a>
-    <button id=showhidequestions class="btn primary pull-right" style="float:right;">>></button>
+	<button id=showhidequestionsButton class="btn primary" style="float:right;">>></button>
+	<button id=showhideslidesButton class="btn primary" style="float:right;"><<</button>
+
 </div>
 <script type="text/javascript">
       $("#like").click(function(){
@@ -280,38 +367,122 @@
   
 </div>
 
+
 <script>
-$("#showhidequestions").toggle(function(){
-	$("#like").hide();
-	$("#dislike").hide();
-	$("#footer").hide();
-	$("#showhidequestions").hide();
-	$("#QuestionsComments").hide();
+
+//##################------START OF showhidequestionsButton----######################//
+
+$("#showhidequestionsButton").toggle(function(){
+    	
+				$("#like").hide();
+				$("#dislike").hide();
+				$("#footer").hide();
+				$("#showhidequestionsButton").hide();
+				$("#showhideslidesButton").hide();
 				
-       	$('#showslides').animate({"width": "100%"},500, function(){
-       		$("#like").show();
-    		$("#dislike").show();
-    		$("#footer").show();
-    		$("#showhidequestions").html('<<');
-    		$("#showhidequestions").show();
+				$("#QuestionsComments").hide();
+				
+				$('#showslides').animate({"width": "99%"},800, function(){
+          			$("#like").show();
+    				$("#dislike").show();
+    				$("#footer").show();
+    				$("#showhidequestionsButton").html('<<');
+    				$("#showhidequestionsButton").show();
           			
-       		});
-         },function(){
+          		});
+          		
+          		
+              		},function(){
               	$("#like").hide();
-        	$("#dislike").hide();
-        	$("#footer").hide();
-        	$("#showhidequestions").hide();
-          	$('#showslides').animate({"width": "65%"}, 500, function(){
+        		$("#dislike").hide();
+        		$("#footer").hide();
+        		$("#showhidequestionsButton").hide();
+        		$("#showhideslidesButton").hide();
+        		
+          		$('#showslides').animate({"width": "65%"}, 800, function(){
           		
-        		$("#QuestionsComments").show();
-        	$("#like").show();
-    		$("#dislike").show();
-    		$("#footer").show();
-    		$("#showhidequestions").html('>>');
-    		$("#showhidequestions").show();
-        	});
+          		$("#QuestionsComments").show();
+              	
+          		$("#like").show();
+    			$("#dislike").show();
+    			$("#footer").show();
+    			$("#showhidequestionsButton").html('>>');
+    			$("#showhidequestionsButton").show();
+    			$("#showhideslidesButton").css({ 'float': 'right'});    			
+    			$("#showhideslidesButton").html('<<');
+    			$("#showhideslidesButton").show();
+          		});
           		
-        });
+          		});
+                		
+//##################------END OF showhidequestionsButton----######################//            		
+                		
+//##################------START OF showhideslidesButton----######################//
+
+$("#showhideslidesButton").toggle(function(){
+    	
+				$("#like").hide();
+				$("#dislike").hide();
+				$("#footer").hide();
+				$("#showslides").hide();
+				
+				$("#showhideslidesButton").hide();				
+				$("#showhidequestionsButton").hide();
+						
+				
+          		$('#QuestionsComments').animate({"width": "99%"},500, function(){
+          			
+    				$("#footer").show();
+    				$("#showhideslidesButton").html('>>');
+    				$("#showhideslidesButton").css({ 'float': 'left'});
+    				$("#showhideslidesButton").show();
+    				
+    			
+          			
+          		});
+          		
+          		
+              		},function(){
+              		$("#like").hide();
+        			$("#dislike").hide();
+        			$("#footer").hide();
+        			$("#showhidequestionsButton").hide();
+        			$("#showhideslidesButton").hide();
+        			
+        			$('#QuestionsComments').animate({"width": "34%"}, 500, function(){
+        			$("#showslides").show();     		
+              		$("#like").show();
+    				$("#dislike").show();
+    				$("#footer").show();
+    				$("#showhidequestionsButton").html('>>');
+    				$("#showhidequestionsButton").show();
+    				$("#showhideslidesButton").css({ 'float': 'right'});
+    				$("#showhideslidesButton").html('<<');
+    				$("#showhideslidesButton").show();
+          		});
+          		
+          		});
+
+
+
+//##################------END OF showhideslidesButton----######################//
+                		
+                		
+
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       <!--row-->
 <%@include file="footer.jsp"%>
