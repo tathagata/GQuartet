@@ -94,10 +94,8 @@
           		var pageNumber = $("#slide").contents().find("#pageNumber").val();
           		console.log("pagenumber changed to " + pageNumber );
            		$.post("navigator", {"talkKey":"<%=talk.key%>", "action":"getQuestionCount", "currentSlideNo":pageNumber}, function(data){
-              		console.log("inside condition " + data);
-			try{
+              			console.log("inside condition " + data);
 				$("#slide").contents().find("#aggregatedquestions").html("Questions(" + data.split(':')[1]+")");	
-			}catch(err){}
             			});
         		}
       		}
