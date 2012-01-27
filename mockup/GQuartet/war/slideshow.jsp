@@ -55,11 +55,10 @@
 <div class="topbar" data-dropdown="dropdown">
 		<div class="topbar-inner">
 			<div class="container-fluid">
-				<a class="brand" href="index.jsp">Quartet</a>
+				<a class="brand" href="#"><%=talk.talkName%></a>
 				<ul class="nav">
-					<li><a href="docs.jsp" target="_blank">Docs</a></li>
-					<li><a href="contacts.jsp" target="_blank">Contact</a></li>
-					<li><a href="#"><%=talk.talkName%></a></li>
+					<li><a href="listfiles.jsp" target="_blank">Docs</a></li>
+					<li><a href="index.jsp" target="_blank">Student</a></li>
 				</ul>
 				<%@include file="search.jsp"%>
 				<div class="pull-right">
