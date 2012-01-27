@@ -14,7 +14,7 @@
 body{
 background-image: url('http://www.uicargus.com/wp-content/uploads/2010/02/dh-exterior-web.jpg');
 background-size:100%;
-padding:200px 0 200px;
+padding:450px 0 200px;
 }
 </style>
 <div class="topbar" data-dropdown="dropdown">
