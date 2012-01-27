@@ -74,8 +74,10 @@ background-color: transparent;
 	%>
   
      <tr>
-     <td bgcolor="#fff">
-     <h3 ><a style="color:black" href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a></h3>
+     <td bgcolor="#fff">      
+     <a href="/slideshow.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
+    
+ </h3>
      </td> 
      </tr>
     
@@ -88,3 +90,7 @@ background-color: transparent;
 
 
 <%@ include file="footer.jsp"%>
+
+
+
+
