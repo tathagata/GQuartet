@@ -12,71 +12,79 @@
 <%@page  import="com.google.gdata.client.*"%>
 <%@page  import="com.google.gdata.client.http.*"%>
 
+<%@ include file="header.jsp"%>
 
 
 <%
   DocumentListFeed feed=null;
 
-
     DocumentList documentList = new DocumentList(
                   "JavaGDataClientSampleAppV3.0" , "docs.google.com");
    
     documentList.login("gquartetbeta@gmail.com", "Google!234");
-
     feed  =  documentList.getDocsListFeed("presentations");
-  
+ 
 %>
-<html> 
-	<head> 
-	<title>GQuartet</title> 
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
-	<link rel="stylesheet" href="style.css" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
-</head> 
-<body> 
-<script>
-$(document).bind("mobileinit", function(){
-  //apply overrides here
-$("#question-input").hide();
-});
-</script>
-<div data-role="page">
-	<div data-role="header">
-		<h1>View</h1>
-	</div><!-- /header -->
-	
 
 
 
-  <div class="content-primary">
-		<ul data-role="listview" data-theme="c">  
+<style type="text/css">
 
+body{
+
+background-image: url('http://www.uicargus.com/wp-content/uploads/2010/02/dh-exterior-web.jpg');
+background-size:100%;
+padding:200px 0 200px;
+background-color: transparent;
+
+}
+</style>
+
+<div class="topbar" data-dropdown="dropdown">
+		<div class="topbar-inner">
+			<div class="container-fluid">
+				<a class="brand" href="index.jsp">Quartet</a>
+				<ul class="nav">
+					<li><a href="docs.jsp" target="_blank">Docs</a></li>
+					<li><a href="contacts.jsp" target="_blank">Contact</a></li>
+				</ul>
+				<%@include file="search.jsp"%>
+			</div>
+		</div>
+	</div>
+
+
+<div class="container">
+    <% 	String talkName = "";%>
+    
+    <table class="bordered-table zebra-striped">
+    <thead>
+    <tr>
+    <th style="background-color:#0064cd; color:white">
+    <h2 style="color:white">My Presentations</h2>
+    </th>
+    </tr>
+    </thead>
+    <tbody link="black">
+        
     <% 
-	String talkName = "";
 	for ( DocumentListEntry entry : feed.getEntries() ) { 
 
 	talkName = entry.getTitle().getPlainText().replaceAll("[^a-zA-Z0-9]+","");
 	%>
   
-    <li>
-      <a href="/slideshow.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a> 
+     <tr>
+     <td bgcolor="#fff">
+     <h3 ><a style="color:black" href="/navigator.jsp?resourceId=<%=entry.getResourceId()%>&talkName=<%=talkName%>" rel="external"><%=entry.getTitle().getPlainText()%></a></h3>
+     </td> 
+     </tr>
     
-    </li>
     <% } %>
-  </div>
-	<div class="center-wrapper" data-role="controlgroup" data-type="horizontal">
-			<a href="index.html" data-role="button" data-icon="check">Got it!</a>
-			<a href="index.html" data-role="button" data-icon="info">Oops!</a>
-			<a id="question" href="index.html" data-role="button" data-icon="plus">Ask</a>
-		</div>
+    
+    </tbody>
+    </table>
+
+</div>
 
 
-</html>
-
-   
-
-
-
-
+<%@ include file="footer.jsp"%>

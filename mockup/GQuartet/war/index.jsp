@@ -32,20 +32,6 @@ padding:200px 0 200px;
 
 
 <div class="container">
-<div class="hero-unit" id="Professor" >
-	<h1> Start a Talk</h1>
-	<form action="slideshow.jsp" method="post">
-	<div class="clearfix">
-	<fieldset>
-	<label for="talkName" id="talk_Name" >Talk Name</label>  
-	<div class="input">
-	    	<input type="text" name="talkName" /> 
-		<input class="btn primary" type="submit" value='Start!' />
-	</div>
-	</fieldset>
-	</div>
-	</form>
-	</div>
 <div class="hero-unit" id="Student">
 	<h1>View a Talk</h1>
 	<form action="guestbook.jsp" method="post">
