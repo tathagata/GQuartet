@@ -1,5 +1,11 @@
-Some Notes:
+This project was built as a quick and dirty prototype for a coding contest. 
+The code was hacked together and does not follow any good coding practices and may make you hate me. Don't hate me. 
+Even hard-coded values are littered around the project.
+Clean up is one of the big TODO items on the list come this summer!
 
-git remote add origin git@github.com:gdevanla/GQuartet.git
-git push -u origin master
+[Still Hackathons rock! We would rather stay up building cool stuff, drinking diet coke and gorging on pizza - that sit at long meetings drawing UML diagrams!]
+
+Use at your own risk and assess the implementation with a grain of salt!
+
+
 
