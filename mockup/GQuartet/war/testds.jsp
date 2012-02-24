@@ -2,6 +2,10 @@
 <%@ page import="java.util.List" %>
 
 <html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript" ></script>
+</head>
+<body>
   Create New Talk:
   <form action="/testdb?action=addnewtalk" method="post">
     Talk Name:
@@ -175,8 +179,15 @@
   </form>
   -->
 
+<iframe id="test" src="https://docs.google.com/present/view?id=0AWNC3oBgXgtdZHN2aHN2M182OWdocTI2d2cz&hl=en_US" height=500 width=500>
+
+<script>
+console.log("twee");
+$("#test").load(function(){
+	console.log("Hey got this from the stuff:"+$("#test").contents().find("#primaryViewSlide"));
 
 
-
-
+});
+</script>
+</body>
 </html>
